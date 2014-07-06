@@ -9,12 +9,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.Assert;
 import org.fernandes.properties.model.Node;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Test for the preprocessor factory.
  * @author onepoint
  */
+@Ignore
 public class PreProcessorFactoryTest {
     
     /**

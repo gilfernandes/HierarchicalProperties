@@ -11,13 +11,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.fernandes.properties.model.Node;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Test for the hierarchical properties factory.
  * @author onepoint
  */
-//@Ignore
+@Ignore
 public class HierarchicalPropertiesFactoryTest {
     
     /**
