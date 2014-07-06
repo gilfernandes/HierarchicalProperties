@@ -1,0 +1,9 @@
+key1 = val1
+key2 = val2
+
+// Testing
+key3  = val3
+
+# Last test
+[/Test]
+key4  = val4

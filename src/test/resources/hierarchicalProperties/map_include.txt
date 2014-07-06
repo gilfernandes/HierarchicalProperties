@@ -1,0 +1,4 @@
+${classpath://hierarchicalProperties/include1.txt}
+key2 = value2
+[/Test]
+key3 = value32

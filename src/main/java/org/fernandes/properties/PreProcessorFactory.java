@@ -1,0 +1,53 @@
+/*
+ OSSCUBE 2014
+ */
+package org.fernandes.properties;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.parboiled.Parboiled;
+import org.parboiled.parserunners.RecoveringParseRunner;
+import org.parboiled.support.ParsingResult;
+
+/**
+ * Factory for the preprocessor parser/
+ *
+ * @author onepoint
+ */
+public class PreProcessorFactory {
+
+    /**
+     * Parses a file for processing the includes.
+     *
+     * @param path The path to the file to be processed.
+     * @return the result of the inclusions based on the directives in
+     * {@code path}.
+     */
+    public static String createInstance(Path path) {
+        if (!Files.exists(path)) {
+            throw new IllegalArgumentException(String.format("%s does not exist.", path));
+        }
+        String content;
+        try {
+            content = new String(Files.readAllBytes(path), "UTF-8");
+            return createInstance(content);
+        } catch (IOException ex) {
+            throw new RuntimeException(String.format("Could not read and process %s.", path), ex);
+        }
+    }
+
+    /**
+     * Creates the instance from a string.
+     *
+     * @param input The parser input.
+     * @return the string with all the inclusions made.
+     */
+    public static String createInstance(final String input) {
+        PreProcessorParser parser = Parboiled.createParser(PreProcessorParser.class);
+        ParsingResult<PreProcessorContainer> result = new RecoveringParseRunner<PreProcessorContainer>(
+                parser.main()).run(input);
+        final PreProcessorContainer resultValue = result.resultValue;
+        return resultValue.getPreprocessedText();
+    }
+}
