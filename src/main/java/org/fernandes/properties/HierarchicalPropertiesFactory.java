@@ -50,12 +50,11 @@ public class HierarchicalPropertiesFactory {
      * @param dereference If {@code true} the hierarchical properties references are dereferenced,
      * else not.
      * @return  an instance of the hierarchical properties
-     * @throws IOException In case the hierarchical properties are found or not.
      */
     public static HierarchicalProperties createInstance(final String input, boolean dereference) {
         HierarchicalPropertiesParser parser = Parboiled.createParser(HierarchicalPropertiesParser.class);
         ParsingResult<?> result = new RecoveringParseRunner<HierarchicalProperties>(
-                parser.Main()).run(input);
+                parser.main()).run(input);
         final HierarchicalProperties resultValue = (HierarchicalProperties) result.resultValue;
         if(resultValue == null) {
             return null;

@@ -1,5 +1,14 @@
 apply plugin: 'java'
 
+group = "org.fernandes"
+version = "0.1"
+/*
+name = "hierarchical.properties"
+
+
+
+*/
+
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 

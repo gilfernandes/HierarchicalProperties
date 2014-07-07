@@ -94,9 +94,9 @@ public class Node {
     }
 
     /**
-     * Returns all the names
+     * Returns a hierarchical representation of the name in Unix style.
      *
-     * @return
+     * @return a hierarchical representation of the name in Unix style.
      */
     public String getHierarchicalName() {
         if(ROOT_NODE_NAME.equals(name)) { // Root node special case.
@@ -108,7 +108,7 @@ public class Node {
             builder.insert(0, cur.name).insert(0, '/');
             cur = cur.parent;
         }
-        return builder.toString().replaceAll("\\/$", "");
+        return builder.toString().replaceAll("\\/$", "").replaceAll("^//", "/");
     }
     
     /**
