@@ -1,0 +1,4 @@
+${file:///D:/dev/playground/hierarchicalProperties/src/test/resources/hierarchicalProperties/map_include_file.txt}
+key2 = value2
+[/Test]
+key3 = value3

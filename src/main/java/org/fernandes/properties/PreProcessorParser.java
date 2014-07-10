@@ -53,7 +53,7 @@ public class PreProcessorParser extends BaseParser<PreProcessorContainer> {
     }
     
     public Rule path() {
-        return firstOf(charRange('0', '9'), charRange('A', 'Z'), charRange('a', 'z'), "/", ".", "_");
+        return noneOf("}");
     }
     
     public Rule newline() {

@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,7 +37,7 @@ public enum IncludeType implements IncludeProcessor {
                         Path p = Paths.get(url.toURI());
                         byte[] bytes = Files.readAllBytes(p);
                         return new String(bytes, "UTF-8");
-                    } catch (URISyntaxException | IOException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(IncludeType.class.getName()).log(Level.SEVERE, null, ex);
                         throw new RuntimeException(ex);
                     }
@@ -127,8 +126,7 @@ public enum IncludeType implements IncludeProcessor {
     @Override
     public CharSequence process(String urlStr) {
         try {
-            String composedStr = urlStr.contains("://") ? urlStr : String.format("%s://%s", this.prefix, urlStr);
-            composedStr = composedStr.replaceAll("(\\:\\/)\\/{2,}", "$1/");
+            String composedStr = String.format("%s:%s", this.prefix, urlStr);
             switch (this) {
                 case CLASSPATH:
                     return process(new URL(null, composedStr, new CPHandler()));
