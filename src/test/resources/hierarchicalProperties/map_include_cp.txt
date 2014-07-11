@@ -1,5 +1,5 @@
-
-key2 = value2
+# Used to test the classpath include.
+key2 = value2 !!!
 !<classpath://hierarchicalProperties/include1.txt>
 [/Test]
 key3 = value3

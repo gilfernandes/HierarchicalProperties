@@ -129,7 +129,7 @@ public class HierarchicalPropertiesParser extends BaseParser<HierarchicalPropert
     }
     
     public Rule multilineComment() {
-        return sequence("/*", zeroOrMore(noneOf("*/")), push(props.addLineComment(match())), "*/");
+        return sequence("/*", zeroOrMore(testNot("*/"), ANY), push(props.addLineComment(match())), "*/");
     }
     
     public Rule categoryNode() {

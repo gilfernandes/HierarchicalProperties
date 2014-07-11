@@ -67,7 +67,21 @@ public class PreProcessorFactoryTest {
             Assert.fail(e.toString());
         }
     }
-
+    
+    /**
+     * Simply includes from http.
+     */
+    @Test
+    public void includeFromHttp() {
+        try {
+            String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_include_http.txt"));
+            sampleChecks(included);
+        } catch (Exception e) {
+            Logger.getLogger(PreProcessorFactoryTest.class.getName()).log(Level.SEVERE, "Test fails", e);
+            Assert.fail(e.toString());
+        }
+    }
+    
     /**
      * Generates the include tag from a relative path. We cannot at present 
      * include directly relative paths in the include directory.

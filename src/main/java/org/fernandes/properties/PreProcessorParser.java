@@ -39,8 +39,7 @@ public class PreProcessorParser extends BaseParser<PreProcessorContainer> {
     }
     
     public Rule normalText() {
-        return firstOf(include(), 
-                oneOrMore(sequence(noneOf("!<"), noneOf("!<")), push(preProcessorContainer.processText(match()))));
+        return firstOf(include(), oneOrMore(testNot("!<"), ANY, push(preProcessorContainer.processText(match()))));
     }
     
     public Rule include() {

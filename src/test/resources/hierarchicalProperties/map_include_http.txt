@@ -1,0 +1,13 @@
+# The test will just include a http page into the comments.
+/*
+
+!<http://www.decodified.com/parboiled/api/java/org/parboiled/BaseParser.html#TestNot(java.lang.Object)>
+
+
+*/
+key2 = value2
+[/Test]
+key3 = value3 <> !!
+# Here we add another type of include
+!<classpath://hierarchicalProperties/include2.txt>
+!<classpath://hierarchicalProperties/include2.txt>
