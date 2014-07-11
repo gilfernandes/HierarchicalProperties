@@ -1,4 +1,5 @@
-${classpath://hierarchicalProperties/include1.txt}
+
 key2 = value2
+!<classpath://hierarchicalProperties/include1.txt>
 [/Test]
-key3 = value32
+key3 = value3

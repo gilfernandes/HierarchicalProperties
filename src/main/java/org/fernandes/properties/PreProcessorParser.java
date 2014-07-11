@@ -43,20 +43,17 @@ public class PreProcessorParser extends BaseParser<PreProcessorContainer> {
     }
     
     public Rule include() {
-        return sequence("${", firstOf(CLASSPATH.getPrefix(), FILE.getPrefix(), HTTP.getPrefix()), 
+        return sequence("!<", firstOf(CLASSPATH.getPrefix(), FILE.getPrefix(), HTTP.getPrefix()), 
                 push(preProcessorContainer.processCurIncludeType(match())), ":", 
-                oneOrMore(path()), push(preProcessorContainer.processInclude(match())), "}");
+                oneOrMore(path()), push(preProcessorContainer.processInclude(match())), ">");
     }
     
     public Rule generalText() {
-        return noneOf("${");
+        return noneOf("!<");
     }
     
     public Rule path() {
-        return noneOf("}");
+        return noneOf(">");
     }
     
-    public Rule newline() {
-        return firstOf('\n', sequence('\r', optional('\n')));
-    }
 }

@@ -1,4 +1,6 @@
-${file:///D:/dev/playground/hierarchicalProperties/src/test/resources/hierarchicalProperties/map_include_file.txt}
+# The test will insert into this file the file include directive.
 key2 = value2
 [/Test]
 key3 = value3
+# Here we add another type of include
+!<classpath://hierarchicalProperties/include2.txt>

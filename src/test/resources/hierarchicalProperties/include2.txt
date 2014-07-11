@@ -1,0 +1,2 @@
+[/Include2]
+includeKey2 = includeValue2

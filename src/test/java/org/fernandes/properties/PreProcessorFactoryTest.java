@@ -3,9 +3,12 @@
  */
 package org.fernandes.properties;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,15 +44,41 @@ public class PreProcessorFactoryTest {
      * from the classpath.
      */
     @Test
-    public void createInstanceAndIncludeFile() throws URISyntaxException, MalformedURLException {
+    public void createInstanceAndIncludeFile() {
         
         try {
-            String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_include_file.txt"));
+            
+            String include = createIncludeTag();
+            
+            List<String> lines = Files.readAllLines(Paths.get("src/test/resources/hierarchicalProperties/map_include_file.txt"));
+            lines.add(0, include);
+            System.out.println(lines);
+            
+            Path tempFile = Files.createTempFile("hpropr_", ".hproperties");
+            Files.write(tempFile, lines, Charset.forName("UTF-8"));
+            
+            String included = PreProcessorFactory.createInstance(tempFile);
             sampleChecks(included);
+            
+            Assert.assertTrue("Could not find include1", included.contains("includeKey1"));
+            Assert.assertTrue("Could not find include2", included.contains("includeKey2"));
         } catch (Exception e) {
             Logger.getLogger(PreProcessorFactoryTest.class.getName()).log(Level.SEVERE, "Test fails", e);
             Assert.fail(e.toString());
         }
+    }
+
+    /**
+     * Generates the include tag from a relative path. We cannot at present 
+     * include directly relative paths in the include directory.
+     * @return an include preprocessor directive.
+     */
+    private String createIncludeTag() {
+        Path p = Paths.get("src/test/resources/hierarchicalProperties/include1.txt");
+        Assert.assertTrue(String.format("Path %s does not exist.", p), Files.exists(p));
+        URI uri = p.toUri();
+        String include = String.format("!<%s>", uri);
+        return include;
     }
 
     /**
