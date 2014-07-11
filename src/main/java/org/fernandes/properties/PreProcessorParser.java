@@ -49,7 +49,7 @@ public class PreProcessorParser extends BaseParser<PreProcessorContainer> {
     }
     
     public Rule generalText() {
-        return noneOf("!<");
+        return noneOf("!");
     }
     
     public Rule path() {
