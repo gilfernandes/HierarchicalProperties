@@ -19,7 +19,9 @@ import org.fernandes.properties.model.Reference;
 import org.fernandes.properties.util.Indentor;
 
 /**
- * Contains hierarchical properties.
+ * Contains the methods used by the parser to inject data into this object
+ * and also the interface to access the underlying data tree with the 
+ * properties.
  *
  * @author onepoint
  */
