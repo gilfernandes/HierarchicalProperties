@@ -125,11 +125,12 @@ public class HierarchicalPropertiesParser extends BaseParser<HierarchicalPropert
     }
     
     public Rule comment() {
-        return sequence(zeroOrMore(' '), firstOf("//", "#"), zeroOrMore(generalText()), zeroOrMore(newline()));
+        return sequence(zeroOrMore(' '), firstOf("//", "#"), zeroOrMore(generalText()), 
+                push(props.addLineComment(match())), newline());
     }
     
     public Rule multilineComment() {
-        return sequence("/*", zeroOrMore(testNot("*/"), ANY), push(props.addLineComment(match())), "*/");
+        return sequence("/*", zeroOrMore(testNot("*/"), ANY), push(props.addMultilineComment(match())), "*/");
     }
     
     public Rule categoryNode() {

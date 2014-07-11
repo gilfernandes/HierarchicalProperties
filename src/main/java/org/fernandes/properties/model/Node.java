@@ -48,16 +48,20 @@ public class Node {
     private final HierarchicalProperties outer;
     
     /**
+     * The multi-line comments.
+     */
+    private final List<String> multilineComments = new ArrayList<>();
+    
+    /**
      * The line comments.
      */
-    private List<String> lineComments;
+    private final List<String> lineComments = new ArrayList<>();
     
     /**
      * Copy constructor.
      * @param original The node to copy from.
      */
     public Node(Node original) {
-        this.lineComments = new ArrayList<>();
         this.name = original.name;
         if(original.parent != null) {
             this.parent = new Node(original.parent);
@@ -65,6 +69,7 @@ public class Node {
         this.outer = original.outer;
         this.children.putAll(original.children);
         this.propertyMap.putAll(original.propertyMap);
+        
     }
     
     /**
@@ -73,7 +78,6 @@ public class Node {
      * @param outer The properties to which the node is associated.
      */
     public Node(String name, final HierarchicalProperties outer) {
-        this.lineComments = new ArrayList<>();
         this.outer = outer;
         this.name = name;
     }
@@ -152,13 +156,30 @@ public class Node {
     }
 
     /**
-     * Returns an iterator for the line comments.
-     * @return an iterator for the line comments.
+     * Returns an iterator for the multi-line comments.
+     * @return an iterator for the multi-line comments.
+     */
+    public Iterator<String> iteratorMultilineComment() {
+        return multilineComments.iterator();
+    }
+    
+    /**
+     * Returns an iterator for the multi-line comments.
+     * @return an iterator for the multi-line comments.
      */
     public Iterator<String> iteratorLineComment() {
         return lineComments.iterator();
     }
 
+    /**
+     * Adds a multi-line comment to this node.
+     * @param e The line comment to add to this node.
+     * @return <tt>true</tt> (as specified by {@link Collection#add})
+     */
+    public boolean addMultilineComment(String e) {
+        return multilineComments.add(e);
+    }
+    
     /**
      * Adds a line comment to this node.
      * @param e The line comment to add to this node.
@@ -169,11 +190,11 @@ public class Node {
     }
 
     /**
-     * Returns the size of the line comment.
-     * @return the size of the line comment.
+     * Returns the size of the multi-line comment.
+     * @return the size of the multi-line comment.
      */
-    public int sizeLineComment() {
-        return lineComments.size();
+    public int sizeMultilineComment() {
+        return multilineComments.size();
     }
 
     /**

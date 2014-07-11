@@ -6,7 +6,6 @@ package org.fernandes.properties;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.fernandes.properties.model.Node;
@@ -32,10 +31,9 @@ public class HierarchicalPropertiesFactoryTest {
             final String propsStr = props.toString();
             Assert.assertTrue("System dereference failed", propsStr.contains("System32"));
             System.out.println(propsStr);
-            Assert.assertTrue(String.format("Node %s does not contain a line format.", helloNode), helloNode.sizeLineComment() > 0);
-            for(Iterator<String> iter = helloNode.iteratorLineComment(); iter.hasNext();) {
-                System.out.println(":::" + iter.next());
-            }
+            Assert.assertTrue(String.format("Node %s does not contain a line format.", helloNode), helloNode.sizeMultilineComment() > 0);
+            helloNode.iteratorMultilineComment().forEachRemaining((c) -> System.out.println("multiline :::" + c));
+            helloNode.iteratorLineComment().forEachRemaining((c) -> System.out.println("single line:::" + c));
             
             Node fernandesNode = props.getNode("/org/fernandes/properties/test");
             Assert.assertNotNull("Fernandes node not found", fernandesNode);

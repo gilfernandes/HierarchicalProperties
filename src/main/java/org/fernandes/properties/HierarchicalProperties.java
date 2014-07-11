@@ -180,14 +180,25 @@ public class HierarchicalProperties implements Iterable<Node> {
     }
     
     /**
+     * Adds a multi-line comment to a node.
+     *
+     * @param multilineComment The multi-line comment to add to a node.
+     * @return the value of the current environment variable.
+     */
+    public HierarchicalProperties addMultilineComment(String multilineComment) {
+        curLineComment = multilineComment;
+        curNode.addMultilineComment(curLineComment);
+        return this;
+    }
+    
+    /**
      * Adds a line comment to a node.
      *
      * @param lineComment The line comment to add to a node.
      * @return the value of the current environment variable.
      */
     public HierarchicalProperties addLineComment(String lineComment) {
-        curLineComment = lineComment;
-        curNode.addLineComment(curLineComment);
+        curNode.addLineComment(lineComment);
         return this;
     }
     
