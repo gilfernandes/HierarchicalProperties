@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.Assert;
-import org.fernandes.properties.model.Node;
+import org.fernandes.properties.model.DefaultNode;
 import org.junit.Test;
 
 /**
@@ -105,11 +105,13 @@ public class PreProcessorFactoryTest {
         Assert.assertNotNull("Included is null", included);
         System.out.println(included);
         HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(included, true);
-        Node root = props.getNode("/");
+        DefaultNode root = props.getNode("/");
         Assert.assertNotNull("The root node is null", root);
-        Node testNode = props.getNode("/Test");
+        DefaultNode testNode = props.getNode("/Test");
         Assert.assertNotNull("Test node is null", testNode);
         Map<String, String> children = testNode.getPropertyMap();
         Assert.assertTrue("Test node should have one child at least one child", children.size() > 0);
+        String val2 = root.getProperty("key2");
+        Assert.assertFalse("The value for key2 should not be null", val2 == null);
     }
 }

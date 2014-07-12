@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.fernandes.properties.model.Node;
+import org.fernandes.properties.model.DefaultNode;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class HierarchicalPropertiesFactoryTest {
     public void testHierarchicalPropertiesFactory() {
         try {
             HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_sample.txt"), true);
-            Node helloNode = props.getNode("/Test/hello");
+            DefaultNode helloNode = props.getNode("/Test/hello");
             Assert.assertNotNull("/Test/hello is null", helloNode);
             final String propsStr = props.toString();
             Assert.assertTrue("System dereference failed", propsStr.contains("System32"));
@@ -35,7 +35,7 @@ public class HierarchicalPropertiesFactoryTest {
             helloNode.iteratorMultilineComment().forEachRemaining((c) -> System.out.println("multiline :::" + c));
             helloNode.iteratorLineComment().forEachRemaining((c) -> System.out.println("single line:::" + c));
             
-            Node fernandesNode = props.getNode("/org/fernandes/properties/test");
+            DefaultNode fernandesNode = props.getNode("/org/fernandes/properties/test");
             Assert.assertNotNull("Fernandes node not found", fernandesNode);
             fernandesNode.getChildren();
         } catch (IOException ex) {

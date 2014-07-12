@@ -8,14 +8,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.fernandes.properties.HierarchicalProperties;
+import org.fernandes.properties.DefaultHierarchicalProperties;
 
 /**
  * The node in the hierarchical properties.
  *
  * @author onepoint
  */
-public class Node {
+public class DefaultNode implements PropertyNode {
     
     /**
      * The root node name.
@@ -30,12 +30,12 @@ public class Node {
     /**
      * The parent node.
      */
-    private Node parent;
+    private DefaultNode parent;
     
     /**
      * The children nodes.
      */
-    private final Map<String, Node> children = new LinkedHashMap<>();
+    private final Map<String, DefaultNode> children = new LinkedHashMap<>();
     
     /**
      * The properties attached to this same node.
@@ -45,7 +45,7 @@ public class Node {
     /**
      * The parent hierarchical properties.
      */
-    private final HierarchicalProperties outer;
+    private final DefaultHierarchicalProperties outer;
     
     /**
      * The multi-line comments.
@@ -61,10 +61,10 @@ public class Node {
      * Copy constructor.
      * @param original The node to copy from.
      */
-    public Node(Node original) {
+    public DefaultNode(DefaultNode original) {
         this.name = original.name;
         if(original.parent != null) {
-            this.parent = new Node(original.parent);
+            this.parent = new DefaultNode(original.parent);
         }
         this.outer = original.outer;
         this.children.putAll(original.children);
@@ -77,7 +77,7 @@ public class Node {
      * @param name The name of the node.
      * @param outer The properties to which the node is associated.
      */
-    public Node(String name, final HierarchicalProperties outer) {
+    public DefaultNode(String name, final DefaultHierarchicalProperties outer) {
         this.outer = outer;
         this.name = name;
     }
@@ -89,7 +89,7 @@ public class Node {
      */
     public int getDepth() {
         int level = 0;
-        Node cur = this;
+        DefaultNode cur = this;
         while (cur.parent != null) {
             level++;
             cur = cur.parent;
@@ -107,7 +107,7 @@ public class Node {
             return ROOT_NODE_NAME;
         }
         StringBuilder builder = new StringBuilder();
-        Node cur = this;
+        DefaultNode cur = this;
         while (cur.parent != null) {
             builder.insert(0, cur.name).insert(0, '/');
             cur = cur.parent;
@@ -122,7 +122,7 @@ public class Node {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        Node cur = this;
+        DefaultNode cur = this;
         builder.insert(0, cur.name + "/");
         while(cur.parent != null) {
             cur = cur.parent;
@@ -135,7 +135,7 @@ public class Node {
      * Returns the parent node.
      * @return the parent node. 
      */
-    public Node getParent() {
+    public DefaultNode getParent() {
         return parent;
     }
 
@@ -143,7 +143,7 @@ public class Node {
      * Returns the children of the current node.
      * @return the children of the current node. 
      */
-    public Map<String, Node> getChildren() {
+    public Map<String, DefaultNode> getChildren() {
         return children;
     }
 
@@ -209,12 +209,24 @@ public class Node {
      * Sets the parent node of this node.
      * @param parent The parent of this node.
      */
-    public void setParent(Node parent) {
+    public void setParent(DefaultNode parent) {
         this.parent = parent;
     }
-    
-    
-    
-    
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getProperty(String key) {
+        return this.getPropertyMap().get(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getProperty(String key, String defaultVal) {
+        String val = this.getProperty(key);
+        return val == null ? defaultVal : val;
+    }
 }

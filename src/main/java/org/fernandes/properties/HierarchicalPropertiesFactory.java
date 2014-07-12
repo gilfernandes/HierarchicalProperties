@@ -53,9 +53,9 @@ public class HierarchicalPropertiesFactory {
      */
     public static HierarchicalProperties createInstance(final String input, boolean dereference) {
         HierarchicalPropertiesParser parser = Parboiled.createParser(HierarchicalPropertiesParser.class);
-        ParsingResult<?> result = new RecoveringParseRunner<HierarchicalProperties>(
+        ParsingResult<?> result = new RecoveringParseRunner<DefaultHierarchicalProperties>(
                 parser.main()).run(input);
-        final HierarchicalProperties resultValue = (HierarchicalProperties) result.resultValue;
+        final DefaultHierarchicalProperties resultValue = (DefaultHierarchicalProperties) result.resultValue;
         if(resultValue == null) {
             return null;
         }

@@ -14,12 +14,12 @@ import org.parboiled.annotations.SuppressSubnodes;
  * @author onepoint
  */
 @BuildParseTree
-public class HierarchicalPropertiesParser extends BaseParser<HierarchicalProperties> {
+public class HierarchicalPropertiesParser extends BaseParser<DefaultHierarchicalProperties> {
 
     /**
      * The domain object to be filled with data.
      */
-    HierarchicalProperties props = new HierarchicalProperties();
+    DefaultHierarchicalProperties props = new DefaultHierarchicalProperties();
     
     public Rule main() {
         return sequence(lines(), EOI);

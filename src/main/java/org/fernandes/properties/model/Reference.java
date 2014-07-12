@@ -13,7 +13,7 @@ public class Reference {
     /**
      * The node where it is found.
      */
-    private Node location;
+    private DefaultNode location;
     
     /**
      * The source property.
@@ -45,7 +45,7 @@ public class Reference {
      * @param targetHierarchy The target hierarchy.
      * @param targetProperty The target property.
      */
-    public Reference(Node location, String targetHierarchy, String targetProperty) {
+    public Reference(DefaultNode location, String targetHierarchy, String targetProperty) {
         this.location = location;
         this.targetHierarchy = targetHierarchy;
         this.targetProperty = targetProperty;
@@ -55,7 +55,7 @@ public class Reference {
      * Returns the location in the tree.
      * @return the location in the tree.
      */
-    public Node getLocation() {
+    public DefaultNode getLocation() {
         return location;
     }
 
@@ -88,7 +88,7 @@ public class Reference {
      * Sets the location in the tree.
      * @param location The location in the tree.
      */
-    public void setLocation(Node location) {
+    public void setLocation(DefaultNode location) {
         this.location = location;
     }
 
