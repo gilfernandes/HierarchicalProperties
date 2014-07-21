@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import org.fernandes.properties.DefaultHierarchicalProperties;
 
 /**
@@ -143,6 +144,7 @@ public class DefaultNode implements PropertyNode {
      * Returns the children of the current node.
      * @return the children of the current node. 
      */
+    @Override
     public Map<String, DefaultNode> getChildren() {
         return children;
     }
@@ -151,6 +153,7 @@ public class DefaultNode implements PropertyNode {
      * Returns the name.
      * @return the name.
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -159,6 +162,7 @@ public class DefaultNode implements PropertyNode {
      * Returns an iterator for the multi-line comments.
      * @return an iterator for the multi-line comments.
      */
+    @Override
     public Iterator<String> iteratorMultilineComment() {
         return multilineComments.iterator();
     }
@@ -167,6 +171,7 @@ public class DefaultNode implements PropertyNode {
      * Returns an iterator for the multi-line comments.
      * @return an iterator for the multi-line comments.
      */
+    @Override
     public Iterator<String> iteratorLineComment() {
         return lineComments.iterator();
     }
@@ -193,18 +198,37 @@ public class DefaultNode implements PropertyNode {
      * Returns the size of the multi-line comment.
      * @return the size of the multi-line comment.
      */
+    @Override
     public int sizeMultilineComment() {
         return multilineComments.size();
+    }
+    
+    /**
+     * Returns the size of the line comments.
+     * @return the size of the line comments. 
+     */
+    public int sizeLineComment() {
+        return lineComments.size();
     }
 
     /**
      * Returns the property map.
      * @return the property map. 
      */
+    @Override
     public Map<String, String> getPropertyMap() {
         return propertyMap;
     }
 
+    /**
+     * Exposes the forEach method for iterating through the properties.
+     * @param action The action function.
+     */
+    @Override
+    public void forEachPropertyMap(BiConsumer<? super String, ? super String> action) {
+        propertyMap.forEach(action);
+    }
+    
     /**
      * Sets the parent node of this node.
      * @param parent The parent of this node.

@@ -316,6 +316,17 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
     }
     
     /**
+     * Allows the implementation of a strategy for processing the nodes.
+     * @param nodeProcessor The node processor.
+     */
+    @Override
+    public void process(NodeProcessFunction nodeProcessor) {
+        for (DefaultNode dn : this) {
+            nodeProcessor.process(dn);
+        }
+    }
+    
+    /**
      * Returns a node by hierarchical name.
      * @param hierarchicalName The path like name of this node.
      * @return a node with hierarchicalName or {@code null}.

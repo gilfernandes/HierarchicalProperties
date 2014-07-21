@@ -45,7 +45,7 @@ test {
     onOutput { 
         descriptor, event -> if (event.destination == TestOutputEvent.Destination.StdOut) 
         { 
-            logger.error("descriptor + " + event.message) 
+            logger.error("message: " + event.message) 
         }
     }
 }

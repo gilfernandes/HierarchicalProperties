@@ -4,6 +4,10 @@
 
 package org.fernandes.properties.model;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.function.BiConsumer;
+
 /**
  * Interface with the property related methods.
  * @author onepoint
@@ -29,4 +33,46 @@ public interface PropertyNode {
      * {@code defaultVal}, if the value was not found.
      */
     public String getProperty(String key, String defaultVal);
+    
+    /**
+     * Returns the map with all properties.
+     * @return the map with all properties.
+     */
+    public Map<String, String> getPropertyMap();
+    
+    /**
+     * Returns the name.
+     * @return the name.
+     */
+    public String getName();
+
+    /**
+     * Exposes the forEach method for iterating through the properties.
+     * @param action The action function.
+     */
+    void forEachPropertyMap(BiConsumer<? super String, ? super String> action);
+
+    /**
+     * Returns an iterator for the multi-line comments.
+     * @return an iterator for the multi-line comments.
+     */
+    public Iterator<String> iteratorMultilineComment();
+    
+    /**
+     * Returns an iterator for the multi-line comments.
+     * @return an iterator for the multi-line comments.
+     */
+    public Iterator<String> iteratorLineComment();
+    
+    /**
+     * Returns the children of the current node.
+     * @return the children of the current node. 
+     */
+    public Map<String, DefaultNode> getChildren();
+    
+    /**
+     * Returns the size of the multi-line comment.
+     * @return the size of the multi-line comment.
+     */
+    public int sizeMultilineComment();
 }

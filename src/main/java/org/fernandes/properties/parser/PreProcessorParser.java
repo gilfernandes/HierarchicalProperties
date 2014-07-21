@@ -2,8 +2,9 @@
  OSSCUBE 2014
  */
 
-package org.fernandes.properties;
+package org.fernandes.properties.parser;
 
+import org.fernandes.properties.PreProcessorContainer;
 import static org.fernandes.properties.model.IncludeType.CLASSPATH;
 import static org.fernandes.properties.model.IncludeType.FILE;
 import static org.fernandes.properties.model.IncludeType.HTTP;

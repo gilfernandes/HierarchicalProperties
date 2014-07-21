@@ -1,8 +1,9 @@
 /*
  OSSCUBE 2014
  */
-package org.fernandes.properties;
+package org.fernandes.properties.parser;
 
+import org.fernandes.properties.DefaultHierarchicalProperties;
 import org.parboiled.BaseParser;
 import static org.parboiled.BaseParser.EOI;
 import org.parboiled.Rule;
