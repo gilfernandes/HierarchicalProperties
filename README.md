@@ -34,9 +34,9 @@ Two types of comments are also supported:
 </li>
 
 <li>Multi-line comments:<br />
-<code>/*  This is a multiline comment !!!!! 
+<pre>/*  This is a multiline comment !!!!! 
 
 With another line.
-*/</code>
+*/</pre>
 </li>
 </ul>
