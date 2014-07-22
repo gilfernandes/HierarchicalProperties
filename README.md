@@ -23,7 +23,7 @@ The tree nodes are defined in this format:
 
 <code>[/level1]</code><br/>
 <code>[/level1/level2]</code><br/>
-<code>[/level1/level2/level3]</code><br/>
+<code>[/level1/level2/level3]</code><br/><br/>
 If no node is specified you are simply writing a property in the root node.
 
 Two types of comments are also supported:
