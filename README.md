@@ -29,11 +29,11 @@ If no node is specified you are simply writing a property in the root node.
 Two types of comments are also supported:
 
 <ul>
-<li>Single line comments:
+<li>Single line comments:<br />
 <code># this is a single line comment</code>
 </li>
 
-<li>Multi-line comments
+<li>Multi-line comments:<br />
 <code>/*  This is a multiline comment !!!!! 
 
 With another line.
