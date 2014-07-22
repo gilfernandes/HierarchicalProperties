@@ -44,13 +44,15 @@ public class DefaultSerializerTest {
 
     @Test
     public void serialize1() {
-        HierarchicalProperties properties = factory.createSample();
+        HierarchicalProperties properties = factory.createSample("src/test/resources/hierarchicalProperties/map_sample.txt");
         Assert.assertNotNull("Properties are null", properties);
         defaultSerializer = new DefaultSerialiser();
         final String sampleFile = "sample.txt";
         try(Writer fileWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sampleFile), "UTF-8"))) {
             defaultSerializer.serialize(properties, fileWriter);
             Assert.assertTrue("Sample file is empty", new File(sampleFile).length() == 0);
+            HierarchicalProperties properties2 = factory.createSample("src/test/resources/hierarchicalProperties/map_sample.txt");
+            Assert.assertTrue("Node count is 0", properties2.nodeCount() > 0);
         } catch (IOException ex) {
             Logger.getLogger(DefaultSerializerTest.class.getName()).log(Level.SEVERE, null, ex);
             Assert.fail("Cannot write file: " + ex);

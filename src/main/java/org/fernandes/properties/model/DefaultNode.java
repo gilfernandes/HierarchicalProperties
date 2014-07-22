@@ -4,6 +4,8 @@
 package org.fernandes.properties.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,7 +19,7 @@ import org.fernandes.properties.DefaultHierarchicalProperties;
  * @author onepoint
  */
 public class DefaultNode implements PropertyNode {
-    
+
     /**
      * The root node name.
      */
@@ -27,54 +29,57 @@ public class DefaultNode implements PropertyNode {
      * The name of the node.
      */
     private final String name;
-    
+
     /**
      * The parent node.
      */
     private DefaultNode parent;
-    
+
     /**
      * The children nodes.
      */
     private final Map<String, DefaultNode> children = new LinkedHashMap<>();
-    
+
     /**
      * The properties attached to this same node.
      */
     private final Map<String, String> propertyMap = new LinkedHashMap<>();
-    
+
     /**
      * The parent hierarchical properties.
      */
     private final DefaultHierarchicalProperties outer;
-    
+
     /**
-     * The multi-line comments.
+     * The multi-line comments that have a position allowing the comments to be
+     * associated
      */
-    private final List<String> multilineComments = new ArrayList<>();
-    
+    private final HashMap<Integer, List<String>> multilineComments = new HashMap<>();
+
     /**
      * The line comments.
      */
     private final List<String> lineComments = new ArrayList<>();
-    
+
     /**
      * Copy constructor.
+     *
      * @param original The node to copy from.
      */
     public DefaultNode(DefaultNode original) {
         this.name = original.name;
-        if(original.parent != null) {
+        if (original.parent != null) {
             this.parent = new DefaultNode(original.parent);
         }
         this.outer = original.outer;
         this.children.putAll(original.children);
         this.propertyMap.putAll(original.propertyMap);
-        
+
     }
-    
+
     /**
      * Associates this node to a name and hierarchical properties.
+     *
      * @param name The name of the node.
      * @param outer The properties to which the node is associated.
      */
@@ -104,7 +109,7 @@ public class DefaultNode implements PropertyNode {
      * @return a hierarchical representation of the name in Unix style.
      */
     public String getHierarchicalName() {
-        if(ROOT_NODE_NAME.equals(name)) { // Root node special case.
+        if (ROOT_NODE_NAME.equals(name)) { // Root node special case.
             return ROOT_NODE_NAME;
         }
         StringBuilder builder = new StringBuilder();
@@ -115,9 +120,10 @@ public class DefaultNode implements PropertyNode {
         }
         return builder.toString().replaceAll("\\/$", "").replaceAll("^//", "/");
     }
-    
+
     /**
      * Returns the string representation of this node.
+     *
      * @return the string representation of this node.
      */
     @Override
@@ -125,7 +131,7 @@ public class DefaultNode implements PropertyNode {
         StringBuilder builder = new StringBuilder();
         DefaultNode cur = this;
         builder.insert(0, cur.name + "/");
-        while(cur.parent != null) {
+        while (cur.parent != null) {
             cur = cur.parent;
             builder.insert(0, cur.name + "/");
         }
@@ -134,7 +140,8 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * Returns the parent node.
-     * @return the parent node. 
+     *
+     * @return the parent node.
      */
     public DefaultNode getParent() {
         return parent;
@@ -142,7 +149,8 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * Returns the children of the current node.
-     * @return the children of the current node. 
+     *
+     * @return the children of the current node.
      */
     @Override
     public Map<String, DefaultNode> getChildren() {
@@ -150,7 +158,17 @@ public class DefaultNode implements PropertyNode {
     }
 
     /**
+     * The size of the children associated to this node.
+     *
+     * @return the size of the children associated to this node.
+     */
+    public int sizeChildren() {
+        return children.size();
+    }
+
+    /**
      * Returns the name.
+     *
      * @return the name.
      */
     @Override
@@ -160,15 +178,31 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * Returns an iterator for the multi-line comments.
+     *
      * @return an iterator for the multi-line comments.
      */
     @Override
     public Iterator<String> iteratorMultilineComment() {
-        return multilineComments.iterator();
+        List<String> strList = deflateListOfLists();
+        return strList.iterator();
     }
-    
+
+    /**
+     * Deflates a list of lists.
+     *
+     * @return a flattened view of a list.
+     */
+    private List<String> deflateListOfLists() {
+        List<String> strList = new ArrayList<>(multilineComments.size());
+        multilineComments.values().forEach(list -> {
+            strList.addAll(list);
+        });
+        return strList;
+    }
+
     /**
      * Returns an iterator for the multi-line comments.
+     *
      * @return an iterator for the multi-line comments.
      */
     @Override
@@ -177,34 +211,42 @@ public class DefaultNode implements PropertyNode {
     }
 
     /**
-     * Returns the list with the multi-line comments.
-     * @return the list with the multi-line comments.
+     * Returns the map with the multi-line comments and its positions.
+     *
+     * @return the map with the multi-line comments and its positions.
      */
-    public List<String> getMultilineComments() {
+    public HashMap<Integer, List<String>> getMultilineComments() {
         return multilineComments;
     }
 
     /**
      * Returns the list with the line comments.
+     *
      * @return the list with the line comments.
      */
     public List<String> getLineComments() {
         return lineComments;
     }
-    
-    
 
     /**
      * Adds a multi-line comment to this node.
+     *
      * @param e The line comment to add to this node.
-     * @return <tt>true</tt> (as specified by {@link Collection#add})
      */
-    public boolean addMultilineComment(String e) {
-        return multilineComments.add(e);
+    public void addMultilineComment(String e) {
+        final int pos = children.size();
+        if (multilineComments.containsKey(pos)) {
+            multilineComments.get(pos).add(e);
+        } else {
+            List<String> mComments = new ArrayList<>();
+            mComments.add(e);
+            multilineComments.put(pos, mComments);
+        }
     }
-    
+
     /**
      * Adds a line comment to this node.
+     *
      * @param e The line comment to add to this node.
      * @return <tt>true</tt> (as specified by {@link Collection#add})
      */
@@ -214,16 +256,18 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * Returns the size of the multi-line comment.
+     *
      * @return the size of the multi-line comment.
      */
     @Override
     public int sizeMultilineComment() {
         return multilineComments.size();
     }
-    
+
     /**
      * Returns the size of the line comments.
-     * @return the size of the line comments. 
+     *
+     * @return the size of the line comments.
      */
     public int sizeLineComment() {
         return lineComments.size();
@@ -231,7 +275,8 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * Returns the property map.
-     * @return the property map. 
+     *
+     * @return the property map.
      */
     @Override
     public Map<String, String> getPropertyMap() {
@@ -240,15 +285,17 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * Exposes the forEach method for iterating through the properties.
+     *
      * @param action The action function.
      */
     @Override
     public void forEachPropertyMap(BiConsumer<? super String, ? super String> action) {
         propertyMap.forEach(action);
     }
-    
+
     /**
      * Sets the parent node of this node.
+     *
      * @param parent The parent of this node.
      */
     public void setParent(DefaultNode parent) {

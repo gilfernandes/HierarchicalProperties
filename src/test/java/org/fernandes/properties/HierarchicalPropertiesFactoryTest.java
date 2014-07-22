@@ -24,16 +24,17 @@ public class HierarchicalPropertiesFactoryTest {
      */
     @Test
     public void testHierarchicalPropertiesFactory() {
-        createSample();
+        createSample("src/test/resources/hierarchicalProperties/map_sample.txt");
     }
 
     /**
      * Tests the sample hierarchical properties.
+     * @param sample The sample file.
      * @return the sample hierarchical properties.
      */
-    public HierarchicalProperties createSample() {
+    public HierarchicalProperties createSample(final String sample) {
         try {
-            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_sample.txt"), true);
+            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(Paths.get(sample), true);
             PropertyNode helloNode = props.getNode("/Test/hello");
             Assert.assertNotNull("/Test/hello is null", helloNode);
             final String propsStr = props.toString();

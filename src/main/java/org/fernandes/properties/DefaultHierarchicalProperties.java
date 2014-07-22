@@ -179,6 +179,7 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
      */
     public DefaultHierarchicalProperties addMultilineComment(String multilineComment) {
         curLineComment = multilineComment;
+        
         curNode.addMultilineComment(curLineComment);
         return this;
     }
@@ -236,17 +237,16 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
         try (PrintWriter out = new PrintWriter(stringWriter, true)) {
             while (!stack.isEmpty()) {
                 DefaultNode current = stack.pop();
-                for (Map.Entry<String, DefaultNode> entry : current.getChildren().entrySet()) {
-                    final DefaultNode node = entry.getValue();
+                current.getChildren().entrySet().stream().map((entry) -> entry.getValue()).forEach((node) -> {
                     stack.push(node);
-                }
+                });
                 final int curDepth = current.getDepth();
                 Indentor.printIndent(curDepth, out, indent);
                 out.printf("- %s%n", current.getHierarchicalName());
-                for (Map.Entry<String, String> propEntry : current.getPropertyMap().entrySet()) {
+                current.getPropertyMap().entrySet().stream().forEach((propEntry) -> {
                     Indentor.printIndent(curDepth, out, "    ");
                     out.printf("%s :: %s%n", propEntry.getKey(), propEntry.getValue());
-                }
+                });
             }
             return stringWriter.toString();
         }
@@ -324,6 +324,17 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
         for (DefaultNode dn : this) {
             nodeProcessor.process(dn);
         }
+    }
+    
+    /**
+     * Returns the node count.
+     * @return the node count. 
+     */
+    @Override
+    public int nodeCount() {
+        int[] count = new int[]{0};
+        process((dn) -> count[0]++);
+        return count[0];
     }
     
     /**

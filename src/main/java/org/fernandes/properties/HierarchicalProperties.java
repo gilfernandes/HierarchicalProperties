@@ -31,4 +31,10 @@ public interface HierarchicalProperties extends Iterable<DefaultNode> {
      * @param nodeProcessor The node processor.
      */
     public void process(NodeProcessFunction nodeProcessor);
+    
+    /**
+     * Returns the node count.
+     * @return the node count. 
+     */
+    public int nodeCount();
 }
