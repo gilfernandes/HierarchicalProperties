@@ -19,9 +19,9 @@ or
 <code>key2 : value2</code>
 
 
-The nodes are defined in this format: 
+The tree nodes are defined in this format: 
 
-<code>[/level1]</code>
+<code>[/level1]</code><br/>
 <code>[/level1/level2]</code>
 
 If no node is specified you are simply writing a property in the root node.
