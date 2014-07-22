@@ -24,6 +24,14 @@ public class HierarchicalPropertiesFactoryTest {
      */
     @Test
     public void testHierarchicalPropertiesFactory() {
+        createSample();
+    }
+
+    /**
+     * Tests the sample hierarchical properties.
+     * @return the sample hierarchical properties.
+     */
+    public HierarchicalProperties createSample() {
         try {
             HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_sample.txt"), true);
             PropertyNode helloNode = props.getNode("/Test/hello");
@@ -38,9 +46,11 @@ public class HierarchicalPropertiesFactoryTest {
             PropertyNode fernandesNode = props.getNode("/org/fernandes/properties/test");
             Assert.assertNotNull("Fernandes node not found", fernandesNode);
             fernandesNode.getChildren();
+            return props;
         } catch (IOException ex) {
             Logger.getLogger(HierarchicalPropertiesFactoryTest.class.getName()).log(Level.SEVERE, null, ex);
             Assert.fail(ex.toString());
         }
+        return null;
     }
 }

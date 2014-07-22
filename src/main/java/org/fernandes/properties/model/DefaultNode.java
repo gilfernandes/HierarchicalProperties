@@ -177,6 +177,24 @@ public class DefaultNode implements PropertyNode {
     }
 
     /**
+     * Returns the list with the multi-line comments.
+     * @return the list with the multi-line comments.
+     */
+    public List<String> getMultilineComments() {
+        return multilineComments;
+    }
+
+    /**
+     * Returns the list with the line comments.
+     * @return the list with the line comments.
+     */
+    public List<String> getLineComments() {
+        return lineComments;
+    }
+    
+    
+
+    /**
      * Adds a multi-line comment to this node.
      * @param e The line comment to add to this node.
      * @return <tt>true</tt> (as specified by {@link Collection#add})

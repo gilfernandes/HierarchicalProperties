@@ -2,7 +2,7 @@
  OSSCUBE 2014
  */
 
-package org.fernandes.properties.serializer;
+package org.fernandes.properties.serialiser;
 
 import java.io.Writer;
 import org.fernandes.properties.HierarchicalProperties;

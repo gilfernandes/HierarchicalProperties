@@ -1,7 +1,7 @@
 /*
  OSSCUBE 2014
  */
-package org.fernandes.properties.serializer;
+package org.fernandes.properties.serialiser;
 
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -33,11 +33,11 @@ public class DefaultSerialiser implements HierarchichalPropertiesSerialiser {
         hProperties.process((DefaultNode dn) -> {
             String hierarchicalName = dn.getHierarchicalName();
             if (!"/".equals(hierarchicalName)) {
-                pWriter.printf("[%s]%n", hierarchicalName);
-                dn.forEachPropertyMap((String key, String value) -> {
-                    pWriter.printf("%s = %s%n", key, value);
-                });
+                pWriter.printf("%n[%s]%n", hierarchicalName);
             }
+            dn.forEachPropertyMap((String key, String value) -> {
+                pWriter.printf("%s = %s%n", key, value);
+            });
         });
     }
 
