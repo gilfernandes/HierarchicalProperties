@@ -18,10 +18,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- *
+ * Tests for the serialiser.
  * @author onepoint
  */
-public class DefaultSerializerTest {
+public class DefaultSerialiserTest {
 
     /**
      * The factory for some hierarchical properties.
@@ -33,7 +33,7 @@ public class DefaultSerializerTest {
      */
     private DefaultSerialiser defaultSerializer;
 
-    public DefaultSerializerTest() {
+    public DefaultSerialiserTest() {
         defaultSerializer = new DefaultSerialiser();
     }
 
@@ -42,6 +42,10 @@ public class DefaultSerializerTest {
         factory = new HierarchicalPropertiesFactoryTest();
     }
 
+    /**
+     * Creates hierarchical properties, serialises it and then re-creates the
+     * properties from the serialisation and does some checks.
+     */
     @Test
     public void serialize1() {
         HierarchicalProperties properties = factory.createSample("src/test/resources/hierarchicalProperties/map_sample.txt");
@@ -54,7 +58,7 @@ public class DefaultSerializerTest {
             HierarchicalProperties properties2 = factory.createSample("src/test/resources/hierarchicalProperties/map_sample.txt");
             Assert.assertTrue("Node count is 0", properties2.nodeCount() > 0);
         } catch (IOException ex) {
-            Logger.getLogger(DefaultSerializerTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DefaultSerialiserTest.class.getName()).log(Level.SEVERE, null, ex);
             Assert.fail("Cannot write file: " + ex);
         }
     }

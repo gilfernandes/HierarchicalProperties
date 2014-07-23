@@ -4,7 +4,6 @@
 package org.fernandes.properties.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -52,14 +51,15 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * The multi-line comments that have a position allowing the comments to be
-     * associated
+     * associated with single properties.
      */
     private final HashMap<Integer, List<String>> multilineComments = new HashMap<>();
 
     /**
-     * The line comments.
+     * The line comments that have a position allowing the comments to be
+     * associated with single properties. The key is the position.
      */
-    private final List<String> lineComments = new ArrayList<>();
+    private final HashMap<Integer, List<String>> lineComments = new HashMap<>();
 
     /**
      * Copy constructor.
@@ -183,18 +183,18 @@ public class DefaultNode implements PropertyNode {
      */
     @Override
     public Iterator<String> iteratorMultilineComment() {
-        List<String> strList = deflateListOfLists();
+        List<String> strList = deflateListOfLists(multilineComments);
         return strList.iterator();
     }
 
     /**
      * Deflates a list of lists.
-     *
+     * @param toFlattenList The lists to be flattened in on single list.
      * @return a flattened view of a list.
      */
-    private List<String> deflateListOfLists() {
-        List<String> strList = new ArrayList<>(multilineComments.size());
-        multilineComments.values().forEach(list -> {
+    private List<String> deflateListOfLists(HashMap<Integer, List<String>> toFlattenList) {
+        List<String> strList = new ArrayList<>(toFlattenList.size());
+        toFlattenList.values().forEach(list -> {
             strList.addAll(list);
         });
         return strList;
@@ -207,7 +207,8 @@ public class DefaultNode implements PropertyNode {
      */
     @Override
     public Iterator<String> iteratorLineComment() {
-        return lineComments.iterator();
+        List<String> strList = deflateListOfLists(lineComments);
+        return strList.iterator();
     }
 
     /**
@@ -224,7 +225,7 @@ public class DefaultNode implements PropertyNode {
      *
      * @return the list with the line comments.
      */
-    public List<String> getLineComments() {
+    public HashMap<Integer, List<String>> getLineComments() {
         return lineComments;
     }
 
@@ -234,13 +235,22 @@ public class DefaultNode implements PropertyNode {
      * @param e The line comment to add to this node.
      */
     public void addMultilineComment(String e) {
-        final int pos = children.size();
-        if (multilineComments.containsKey(pos)) {
-            multilineComments.get(pos).add(e);
+        addComment(multilineComments, propertyMap.size(), e);
+    }
+
+    /**
+     * Adds a comment at a specific position.
+     * @param lineComments1 The comments multi-map.
+     * @param pos The position for the key.
+     * @param e The string to add to the list at a specific position.
+     */
+    private void addComment(final HashMap<Integer, List<String>> lineComments1, final int pos, String e) {
+        if (lineComments1.containsKey(pos)) {
+            lineComments1.get(pos).add(e);
         } else {
             List<String> mComments = new ArrayList<>();
             mComments.add(e);
-            multilineComments.put(pos, mComments);
+            lineComments1.put(pos, mComments);
         }
     }
 
@@ -248,10 +258,9 @@ public class DefaultNode implements PropertyNode {
      * Adds a line comment to this node.
      *
      * @param e The line comment to add to this node.
-     * @return <tt>true</tt> (as specified by {@link Collection#add})
      */
-    public boolean addLineComment(String e) {
-        return lineComments.add(e);
+    public void addLineComment(String e) {
+        addComment(lineComments, propertyMap.size(), e);
     }
 
     /**

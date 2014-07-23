@@ -40,12 +40,17 @@ public class DefaultSerialiser implements HierarchichalPropertiesSerialiser {
             }
             // Print the multi-line comments and the properties.
             HashMap<Integer, List<String>> multiComments = dn.getMultilineComments();
+            HashMap<Integer, List<String>> lineComments = dn.getLineComments();
             final int[] idx = { 0 }; // like an integer pointer.
             dn.forEachPropertyMap((String key, String value) -> {
-                writeMultilineComment(multiComments, idx, pWriter);
+                writeComment(multiComments, idx, pWriter, "/* %s */%n");
+                writeComment(lineComments, idx, pWriter, "# %s%n");
                 pWriter.printf("%s = %s%n", key, value);
                 idx[0]++;
             });
+            // Write comments past the actual properties
+            writeComment(multiComments, idx, pWriter, "/* %s */%n");
+            writeComment(lineComments, idx, pWriter, "# %s%n");
         });
     }
 
@@ -55,11 +60,11 @@ public class DefaultSerialiser implements HierarchichalPropertiesSerialiser {
      * @param idx The pointer to the current position.
      * @param pWriter the writer to write to.
      */
-    private void writeMultilineComment(HashMap<Integer, List<String>> multiComments, final int[] idx, PrintWriter pWriter) {
+    private void writeComment(HashMap<Integer, List<String>> multiComments, final int[] idx, PrintWriter pWriter, String pattern) {
         List<String> multiCommentList = multiComments.get(idx[0]);
         if(multiCommentList != null) {
             multiCommentList.forEach(s -> {
-                pWriter.printf("/* %s */%n", s);
+                pWriter.printf(pattern, s);
             });
         }
     }
