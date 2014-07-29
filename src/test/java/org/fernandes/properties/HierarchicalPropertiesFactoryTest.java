@@ -26,6 +26,20 @@ public class HierarchicalPropertiesFactoryTest {
     public void testHierarchicalPropertiesFactory() {
         createSample("src/test/resources/hierarchicalProperties/map_sample.txt");
     }
+    
+    /**
+     * Tests a parsing hierarchical properties with de-referencing from the classpath.
+     */
+    @Test
+    public void testHierarchicalPropertiesFactoryCp() {
+        try {
+            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstanceCp("hierarchicalProperties/map_sample.txt");
+            Assert.assertNotNull("The properties are null", props);
+        } catch (IOException ex) {
+            Logger.getLogger(HierarchicalPropertiesFactoryTest.class.getName()).log(Level.SEVERE, null, ex);
+            Assert.fail(ex.toString());
+        }
+    }
 
     /**
      * Tests the sample hierarchical properties.

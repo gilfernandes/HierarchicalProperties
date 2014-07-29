@@ -29,7 +29,6 @@ public class PreProcessorParser extends BaseParser<PreProcessorContainer> {
 
     public Rule lines() {
         return oneOrMore(mainElement());
-                
     }
 
     public Rule mainElement() {

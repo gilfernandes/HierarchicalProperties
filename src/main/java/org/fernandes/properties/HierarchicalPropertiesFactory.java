@@ -3,11 +3,12 @@
  */
 package org.fernandes.properties;
 
-import org.fernandes.properties.parser.HierarchicalPropertiesParser;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.fernandes.properties.model.IncludeType;
+import org.fernandes.properties.parser.HierarchicalPropertiesParser;
 import org.parboiled.Parboiled;
 import org.parboiled.parserunners.RecoveringParseRunner;
 import org.parboiled.support.ParsingResult;
@@ -18,6 +19,17 @@ import org.parboiled.support.ParsingResult;
  * @author onepoint
  */
 public class HierarchicalPropertiesFactory {
+    
+    /**
+     * Creates an instance of the hierarchical properties from a classpath resource.
+     * @param classpath The classpath resource.
+     * @return an instance of the hierarchical properties
+     * @throws IOException In case the file cannot be found.
+     */
+    public static final HierarchicalProperties createInstanceCp(String classpath) throws IOException {
+        CharSequence input = IncludeType.CLASSPATH.process(classpath);
+        return createInstance(input.toString(), true);
+    }
 
     /**
      * Creates an instance of the hierarchical properties which dereferences per default.
