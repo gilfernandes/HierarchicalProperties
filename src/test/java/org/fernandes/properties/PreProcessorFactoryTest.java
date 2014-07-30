@@ -29,6 +29,21 @@ public class PreProcessorFactoryTest {
      * from the classpath.
      */
     @Test
+    public void createInstanceCpAndIncludeClasspath() {
+        try {
+            String included = PreProcessorFactory.createInstanceFromCp("hierarchicalProperties/map_include_cp.txt");
+            sampleChecks(included);
+        } catch (Exception e) {
+            Logger.getLogger(PreProcessorFactoryTest.class.getName()).log(Level.SEVERE, "Test fails", e);
+            Assert.fail(e.toString());
+        }
+    }
+    
+    /**
+     * Creates an instance of the preprocessor factory and performs the includes
+     * from the classpath.
+     */
+    @Test
     public void createInstanceAndIncludeClasspath() {
         try {
             String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_include_cp.txt"));

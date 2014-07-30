@@ -3,10 +3,11 @@
  */
 package org.fernandes.properties;
 
-import org.fernandes.properties.parser.PreProcessorParser;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.fernandes.properties.model.IncludeType;
+import org.fernandes.properties.parser.PreProcessorParser;
 import org.parboiled.Parboiled;
 import org.parboiled.parserunners.RecoveringParseRunner;
 import org.parboiled.support.ParsingResult;
@@ -17,6 +18,19 @@ import org.parboiled.support.ParsingResult;
  * @author onepoint
  */
 public class PreProcessorFactory {
+    
+    /**
+     * Creates an instance of the properties from the classpath.
+     * @param cp The classpath to read from.
+     * @return a string with the preprocessed properties.
+     */
+    public static String createInstanceFromCp(String cp) {
+        if(cp == null || cp.trim().isEmpty()) {
+            throw new IllegalArgumentException("The classpath is empty.");
+        }
+        CharSequence content = IncludeType.CLASSPATH.process(cp);
+        return createInstance(content.toString());
+    }
 
     /**
      * Parses a file for processing the includes.
@@ -49,6 +63,6 @@ public class PreProcessorFactory {
         ParsingResult<PreProcessorContainer> result = new RecoveringParseRunner<PreProcessorContainer>(
                 parser.main()).run(input);
         final PreProcessorContainer resultValue = result.resultValue;
-        return resultValue.getPreprocessedText();
+        return resultValue == null ? "" : resultValue.getPreprocessedText();
     }
 }
