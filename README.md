@@ -7,8 +7,20 @@ It contains a parser for properties in a tree of nodes. It supports also node re
 
 This project has also a serialiser. So now you can serialise and deserialise properties.
 
-Main features
+Pre-processor
 -------------
+
+As of now the pre-processor only has two features: it can process includes from the file system, 
+classpath or from the web using http and it can process defined constants. 
+
+The typical syntax for a classpath pre-processor include is:
+
+<code>!<classpath://hierarchicalProperties/include1.txt></code>
+
+
+
+Properties - main features
+--------------------------
 
 Properties are stored in a tree. A property looks like e.g:
 
