@@ -35,9 +35,9 @@ public class PreProcessorFactory {
     /**
      * Parses a file for processing the includes.
      *
-     * @param path The path to the file to be processed.
+     * @param path The dirContent to the file to be processed.
      * @return the result of the inclusions based on the directives in
-     * {@code path}.
+     * {@code dirContent}.
      */
     public static String createInstance(Path path) {
         if (!Files.exists(path)) {

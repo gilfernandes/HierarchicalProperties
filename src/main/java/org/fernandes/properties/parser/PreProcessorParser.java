@@ -8,7 +8,6 @@ import org.fernandes.properties.PreProcessorContainer;
 import static org.fernandes.properties.model.IncludeType.CLASSPATH;
 import static org.fernandes.properties.model.IncludeType.FILE;
 import static org.fernandes.properties.model.IncludeType.HTTP;
-import org.parboiled.BaseParser;
 import static org.parboiled.BaseParser.EOI;
 import org.parboiled.Rule;
 
@@ -16,7 +15,7 @@ import org.parboiled.Rule;
  * Parser used to process the includes of the preprocessor.
  * @author onepoint
  */
-public class PreProcessorParser extends BaseParser<PreProcessorContainer> {
+public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
     
     /**
      * The container used with the preprocessor content.
@@ -39,17 +38,44 @@ public class PreProcessorParser extends BaseParser<PreProcessorContainer> {
     }
     
     public Rule normalText() {
-        return firstOf(include(), oneOrMore(testNot("!<"), ANY, push(preProcessorContainer.processText(match()))));
+        return firstOf(preprocessorCommand(), oneOrMore(testNot("!<"), ANY, push(preProcessorContainer.processText(match()))));
     }
     
+    public Rule preprocessorCommand() {
+        return sequence("!<", firstOf(define(), include(), defineVal()), ">");
+    }
+    
+    /**
+     * Example: !<classpath://hierarchicalProperties/include1.txt>
+     * @return 
+     */
     public Rule include() {
-        return sequence("!<", firstOf(CLASSPATH.getPrefix(), FILE.getPrefix(), HTTP.getPrefix()), 
+        return sequence(firstOf(CLASSPATH.getPrefix(), FILE.getPrefix(), HTTP.getPrefix()), 
                 push(preProcessorContainer.processCurIncludeType(match())), ":", 
-                oneOrMore(path()), push(preProcessorContainer.processInclude(match())), ">");
+                oneOrMore(dirContent()), push(preProcessorContainer.processInclude(match())));
     }
     
-    public Rule path() {
+    /**
+     * Example: {@code !<def:env=production> }
+     * @return rule for defines.
+     */
+    public Rule define() {
+        return sequence(zeroOrMore(" "), "def", zeroOrMore(" "), ":", zeroOrMore(" "), 
+                oneOrMore(alphaNumericWithDot()), push(preProcessorContainer.addConstantKey(match())), 
+                zeroOrMore(" "), "=", oneOrMore(alphaNumericWithDot()), push(preProcessorContainer.addConstantVal(match())));
+    }
+    
+    /**
+     * Corresponds to a value of a define to be inserted.
+     * Example: {@code !<def:env=production> }
+     * @return a define to be inserted.
+     */
+    public Rule defineVal() {
+        return sequence(zeroOrMore(" "), "$", oneOrMore(alphaNumericWithDot()), 
+                push(preProcessorContainer.addDefineVal(match())), zeroOrMore(" "));
+    }
+    
+    public Rule dirContent() {
         return noneOf(">");
     }
-    
 }

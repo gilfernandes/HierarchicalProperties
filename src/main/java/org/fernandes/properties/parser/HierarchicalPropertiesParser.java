@@ -4,7 +4,6 @@
 package org.fernandes.properties.parser;
 
 import org.fernandes.properties.DefaultHierarchicalProperties;
-import org.parboiled.BaseParser;
 import static org.parboiled.BaseParser.EOI;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
@@ -15,7 +14,7 @@ import org.parboiled.annotations.SuppressSubnodes;
  * @author onepoint
  */
 @BuildParseTree
-public class HierarchicalPropertiesParser extends BaseParser<DefaultHierarchicalProperties> {
+public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarchicalProperties> {
 
     /**
      * The domain object to be filled with data.
@@ -57,18 +56,6 @@ public class HierarchicalPropertiesParser extends BaseParser<DefaultHierarchical
     public Rule value() {
         // Supports multiline values using FirstOf
         return oneOrMore(firstOf(sequence('\\', newline()), ENV(), SYS(), reference(), generalText()));
-    }
-
-    public Rule alphaNumeric() {
-        return firstOf(charRange('0', '9'), charRange('A', 'Z'), charRange('a', 'z'));
-    }
-    
-    public Rule alphaNumericWithDot() {
-        return firstOf(alphaNumeric(), '.');
-    }
-    
-    public Rule generalText() {
-        return firstOf(charRange(' ', '~'), charRange('\u0080', '\u00ff'));
     }
 
     /**
