@@ -15,7 +15,7 @@ classpath or from the web using http and it can process defined constants.
 
 The typical syntax for a classpath pre-processor include is:
 
-<code>!<classpath://hierarchicalProperties/include1.txt></code>
+<code>!&lt;classpath://hierarchicalProperties/include1.txt&gt;</code>
 
 
 
