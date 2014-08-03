@@ -10,7 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import org.fernandes.properties.DefaultHierarchicalProperties;
 
 /**
  * The node in the hierarchical properties.

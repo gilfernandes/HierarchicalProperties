@@ -3,6 +3,7 @@
  */
 package org.fernandes.properties;
 
+import org.fernandes.properties.model.DefaultHierarchicalProperties;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;

@@ -3,7 +3,7 @@
  */
 package org.fernandes.properties.parser;
 
-import org.fernandes.properties.DefaultHierarchicalProperties;
+import org.fernandes.properties.model.DefaultHierarchicalProperties;
 import static org.parboiled.BaseParser.EOI;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;

@@ -4,10 +4,10 @@
 
 package org.fernandes.properties.parser;
 
-import org.fernandes.properties.PreProcessorContainer;
 import static org.fernandes.properties.model.IncludeType.CLASSPATH;
 import static org.fernandes.properties.model.IncludeType.FILE;
 import static org.fernandes.properties.model.IncludeType.HTTP;
+import org.fernandes.properties.model.PreProcessorContainer;
 import static org.parboiled.BaseParser.EOI;
 import org.parboiled.Rule;
 
@@ -41,18 +41,24 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
         return firstOf(preprocessorCommand(), oneOrMore(testNot("!<"), ANY, push(preProcessorContainer.processText(match()))));
     }
     
+    /**
+     * Returns a rule for a pre-processor command, one of a define and include and define value
+     * or an if component.
+     * @return a rule for a pre-processor command, one of a define and include and define value
+     * or an if component.
+     */
     public Rule preprocessorCommand() {
-        return sequence("!<", firstOf(define(), include(), defineVal()), ">");
+        return sequence("!<", firstOf(define(), include(), defineVal(), ifStart(), ifEnd()), ">");
     }
     
     /**
      * Example: !<classpath://hierarchicalProperties/include1.txt>
-     * @return 
+     * @return rule for include.
      */
     public Rule include() {
         return sequence(firstOf(CLASSPATH.getPrefix(), FILE.getPrefix(), HTTP.getPrefix()), 
                 push(preProcessorContainer.processCurIncludeType(match())), ":", 
-                oneOrMore(dirContent()), push(preProcessorContainer.processInclude(match())));
+                oneOrMore(urlContent()), push(preProcessorContainer.processInclude(match())));
     }
     
     /**
@@ -60,9 +66,9 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
      * @return rule for defines.
      */
     public Rule define() {
-        return sequence(zeroOrMore(" "), "def", zeroOrMore(" "), ":", zeroOrMore(" "), 
+        return sequence(spaces(), "def", spaces(), ":", spaces(), 
                 oneOrMore(alphaNumericWithDot()), push(preProcessorContainer.addConstantKey(match())), 
-                zeroOrMore(" "), "=", oneOrMore(alphaNumericWithDot()), push(preProcessorContainer.addConstantVal(match())));
+                spaces(), "=", spaces(), oneOrMore(alphaNumericWithDot()), push(preProcessorContainer.addConstantVal(match())));
     }
     
     /**
@@ -71,11 +77,30 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
      * @return a define to be inserted.
      */
     public Rule defineVal() {
-        return sequence(zeroOrMore(" "), "$", oneOrMore(alphaNumericWithDot()), 
-                push(preProcessorContainer.addDefineVal(match())), zeroOrMore(" "));
+        return sequence(spaces(), "$", oneOrMore(alphaNumericWithDot()), 
+                push(preProcessorContainer.addDefineVal(match())), spaces());
     }
     
-    public Rule dirContent() {
+    /**
+     * Example: !<if:env == prod>
+     * @return the rule for the if start.
+     */
+    public Rule ifStart() {
+        return sequence(spaces(), "if", spaces(), ":", spaces(), 
+                oneOrMore(alphaNumericWithDot()), push(preProcessorContainer.ifStartVar(match())),
+                spaces(), firstOf("==", "!="), push(preProcessorContainer.ifOperator(match())), spaces(), 
+                oneOrMore(alphaNumericWithDot()), push(preProcessorContainer.ifStartVal(match())));
+    }
+    
+    public Rule ifEnd() {
+        return sequence(spaces(), "endif", spaces());
+    }
+    
+    /**
+     * Returns a rule for the content of a URL. Used in an include.
+     * @return a rule for the content of a URL.
+     */
+    public Rule urlContent() {
         return noneOf(">");
     }
 }

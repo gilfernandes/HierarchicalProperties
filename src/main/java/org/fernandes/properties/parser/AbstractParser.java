@@ -28,4 +28,12 @@ public class AbstractParser <T> extends BaseParser<T> {
     public Rule generalText() {
         return firstOf(charRange(' ', '~'), charRange('\u0080', '\u00ff'));
     }
+    
+    /**
+     * Returns a rule that recognises optional multiple spaces.
+     * @return a rule that recognises optional multiple spaces. 
+     */
+    protected Rule spaces() {
+        return zeroOrMore(" ");
+    }
 }

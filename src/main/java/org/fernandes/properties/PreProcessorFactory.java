@@ -3,6 +3,7 @@
  */
 package org.fernandes.properties;
 
+import org.fernandes.properties.model.PreProcessorContainer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,9 +36,9 @@ public class PreProcessorFactory {
     /**
      * Parses a file for processing the includes.
      *
-     * @param path The dirContent to the file to be processed.
+     * @param path The urlContent to the file to be processed.
      * @return the result of the inclusions based on the directives in
-     * {@code dirContent}.
+     * {@code urlContent}.
      */
     public static String createInstance(Path path) {
         if (!Files.exists(path)) {

@@ -1,7 +1,7 @@
 /*
  OSSCUBE 2014
  */
-package org.fernandes.properties;
+package org.fernandes.properties.model;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.fernandes.properties.HierarchicalProperties;
+import org.fernandes.properties.NodeProcessFunction;
 import org.fernandes.properties.model.DefaultNode;
 import org.fernandes.properties.model.Reference;
 import org.fernandes.properties.util.Indentor;
