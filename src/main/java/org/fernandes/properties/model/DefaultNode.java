@@ -326,4 +326,39 @@ public class DefaultNode implements PropertyNode {
         String val = this.getProperty(key);
         return val == null ? defaultVal : val;
     }
+
+    /**
+     * Returns a property as integer.
+     * @param key The key used to retrieve the integer.
+     * @return the property value as integer or {@code null} in case the 
+     * property cannot be found or is not an integer.
+     */
+    @Override
+    public Integer getPropertyAsInt(String key) {
+        String val = getProperty(key);
+        if(val == null) {
+            return null;
+        }
+        val = val.trim();
+        if(val.matches("\\d+")) {
+            return Integer.parseInt(val);
+        }
+        return null;
+    }
+
+    /**
+     * Returns a property as integer.
+     * @param key The key from which we are retrieving the integer.
+     * @param defaultVal The default value, in case the property cannot be 
+     * retrieved.
+     * @return a property as integer.
+     */
+    @Override
+    public Integer getPropertyAsInt(String key, int defaultVal) {
+        Integer res = this.getPropertyAsInt(key);
+        if(res == null) {
+            return defaultVal;
+        }
+        return res;
+    }
 }

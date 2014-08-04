@@ -20,7 +20,7 @@ public class HierarchicalPreprocessorFactory {
      * to hierarchical properties.
      * @return an instance of hierarchical properties.
      */
-    public HierarchicalProperties createInstance(Path path) {
+    public static HierarchicalProperties createInstance(Path path) {
         String included = PreProcessorFactory.createInstance(path);
         return HierarchicalPropertiesFactory.createInstance(included, true);
     }

@@ -35,6 +35,22 @@ public interface PropertyNode {
     public String getProperty(String key, String defaultVal);
     
     /**
+     * Returns a property as integer.
+     * @param key The key from which we are retrieving the integer.
+     * @return a property as integer.
+     */
+    public Integer getPropertyAsInt(String key);
+    
+    /**
+     * Returns a property as integer.
+     * @param key The key from which we are retrieving the integer.
+     * @param defaultVal The default value, in case the property cannot be 
+     * retrieved.
+     * @return a property as integer.
+     */
+    public Integer getPropertyAsInt(String key, int defaultVal);
+    
+    /**
      * Returns the map with all properties.
      * @return the map with all properties.
      */
