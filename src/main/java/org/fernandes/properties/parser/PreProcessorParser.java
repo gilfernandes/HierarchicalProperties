@@ -93,7 +93,7 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
     }
     
     public Rule ifEnd() {
-        return sequence(spaces(), "endif", spaces());
+        return sequence(spaces(), "endif", push(preProcessorContainer.ifEnd()), spaces());
     }
     
     /**

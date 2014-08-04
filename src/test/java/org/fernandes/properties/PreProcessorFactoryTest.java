@@ -59,7 +59,7 @@ public class PreProcessorFactoryTest {
      * from the classpath, checks if the if condition works.
      */
     @Test
-    public void createInstanceCpAndIncludeClasspathWithDefIf() {
+    public void createInstanceCpAndIncludeClasspathWithDefIf1() {
         try {
             String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_if_1.txt"));
             Assert.assertFalse("if not resolved", included.contains("if:env == prod"));
@@ -73,6 +73,31 @@ public class PreProcessorFactoryTest {
             Assert.fail(e.toString());
         }
     }
+    
+    /**
+     * Creates an instance of the preprocessor factory and performs the includes
+     * from the classpath, checks if the if condition works.
+     */
+    @Test
+    public void createInstanceCpAndIncludeClasspathWithDefIf2() {
+        try {
+            String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_if_2.txt"));
+            Assert.assertFalse("if not resolved", included.contains("if:env == prod"));
+            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(included, true);
+            PropertyNode root = props.getNode("/");
+            Assert.assertNotNull("The root node is null", root);
+            PropertyNode testNode = props.getNode("/Test");
+            Assert.assertNotNull("Test node is null", testNode);
+            String key3 = testNode.getProperty("key3");
+            Assert.assertNotNull("key3 is null", key3);
+            String keyDef = testNode.getProperty("keyDef");
+            Assert.assertNull("keyDef is not null", keyDef);
+        } catch (Exception e) {
+            Logger.getLogger(PreProcessorFactoryTest.class.getName()).log(Level.SEVERE, "Test fails", e);
+            Assert.fail(e.toString());
+        }
+    }
+    
     /**
      * Creates an instance of the preprocessor factory and performs the includes
      * from the classpath, checks if the if condition works.
