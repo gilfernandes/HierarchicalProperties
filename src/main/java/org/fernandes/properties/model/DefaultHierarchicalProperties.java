@@ -3,6 +3,8 @@
  */
 package org.fernandes.properties.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -15,19 +17,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.fernandes.properties.HierarchicalProperties;
 import org.fernandes.properties.NodeProcessFunction;
-import org.fernandes.properties.model.DefaultNode;
-import org.fernandes.properties.model.Reference;
 import org.fernandes.properties.util.Indentor;
 
 /**
- * Contains the methods used by the parser to inject data into this object
- * and also the interface to access the underlying data tree with the 
- * properties.
+ * Contains the methods used by the parser to inject data into this object and
+ * also the interface to access the underlying data tree with the properties.
  *
  * @author onepoint
  */
 public class DefaultHierarchicalProperties implements HierarchicalProperties {
-    
+
     /**
      * The logging class.
      */
@@ -36,7 +35,7 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
     /**
      * The root node.
      */
-    private final DefaultNode root = new DefaultNode(DefaultNode.ROOT_NODE_NAME, this);
+    private DefaultNode root = new DefaultNode(DefaultNode.ROOT_NODE_NAME, this);
 
     /**
      * The current pointer to
@@ -47,17 +46,17 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
      * The current key.
      */
     private String curKey;
-    
+
     /**
      * The current reference key.
      */
     private Reference curRefKey;
-    
+
     /**
      * The current line comment.
      */
     private String curLineComment;
-    
+
     /**
      * The reference list.
      */
@@ -68,6 +67,11 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
      * enviroment and the Java system properties category.
      */
     private final Map<String, Map<String, String>> elVarMap = new HashMap<>();
+
+    /**
+     * Used to fire property change events to listeners.
+     */
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     /**
      * Gets the value for a key from the current node.
@@ -146,7 +150,7 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
         }
         return this;
     }
-    
+
     /**
      * Prepares a hierarchy node.
      *
@@ -161,7 +165,7 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
         this.refList.add(curRefKey);
         return this;
     }
-    
+
     /**
      * Puts a current environment value.
      *
@@ -172,7 +176,7 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
         curRefKey.setTargetProperty(referenceVal);
         return this;
     }
-    
+
     /**
      * Adds a multi-line comment to a node.
      *
@@ -181,11 +185,11 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
      */
     public DefaultHierarchicalProperties addMultilineComment(String multilineComment) {
         curLineComment = multilineComment;
-        
+
         curNode.addMultilineComment(curLineComment);
         return this;
     }
-    
+
     /**
      * Adds a line comment to a node.
      *
@@ -196,8 +200,6 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
         curNode.addLineComment(lineComment);
         return this;
     }
-    
-    
 
     /**
      * Creates a hierarchy with an expression like "/opt/test" where "/" is the
@@ -316,9 +318,10 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
             }
         };
     }
-    
+
     /**
      * Allows the implementation of a strategy for processing the nodes.
+     *
      * @param nodeProcessor The node processor.
      */
     @Override
@@ -327,10 +330,11 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
             nodeProcessor.process(dn);
         }
     }
-    
+
     /**
      * Returns the node count.
-     * @return the node count. 
+     *
+     * @return the node count.
      */
     @Override
     public int nodeCount() {
@@ -338,25 +342,26 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
         process((dn) -> count[0]++);
         return count[0];
     }
-    
+
     /**
      * Returns a node by hierarchical name.
+     *
      * @param hierarchicalName The path like name of this node.
      * @return a node with hierarchicalName or {@code null}.
      */
     @Override
     public DefaultNode getNode(String hierarchicalName) {
-        if(root.getHierarchicalName().equals(hierarchicalName)) {
+        if (root.getHierarchicalName().equals(hierarchicalName)) {
             return root;
         }
         Stack<DefaultNode> nodeStack = new Stack<>();
         nodeStack.push(root);
-        while(!nodeStack.isEmpty()) {
+        while (!nodeStack.isEmpty()) {
             DefaultNode presentNode = nodeStack.pop();
             Map<String, DefaultNode> map = presentNode.getChildren();
-            for(Map.Entry<String, DefaultNode> entry : map.entrySet()) {
+            for (Map.Entry<String, DefaultNode> entry : map.entrySet()) {
                 DefaultNode child = entry.getValue();
-                if(child.getHierarchicalName().equals(hierarchicalName)) {
+                if (child.getHierarchicalName().equals(hierarchicalName)) {
                     return child;
                 }
                 nodeStack.push(child);
@@ -364,21 +369,36 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
         }
         return null;
     }
-    
+
     /**
      * Returns the root node, parent of all other nodes.
+     *
      * @return the root node, parent of all other nodes.
      */
     @Override
-    public DefaultNode getRoot(){
+    public DefaultNode getRoot() {
         return this.getNode("/");
     }
-    
+
+    /**
+     * Sets a new root.
+     *
+     * @param root The root to set.
+     */
+    @Override
+    public void setRoot(PropertyNode root) {
+        if (root instanceof DefaultNode) {
+            DefaultNode oldValue = this.root;
+            this.root = (DefaultNode) root;
+            this.pcs.firePropertyChange("root", oldValue, root);
+        }
+    }
+
     /**
      * Looks up the references.
      */
     public void dereferenceRefs() {
-        for(Reference ref : this.refList) {
+        for (Reference ref : this.refList) {
             DefaultNode whereTochange = ref.getLocation();
             // the previous node needs to be reloaded.
             whereTochange = getNode(whereTochange.getHierarchicalName());
@@ -388,12 +408,32 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
             final String sourceProperty = ref.getSourceProperty();
             String targetVal = targetNode.getPropertyMap().get(targetProperty);
             String toChange = whereTochange.getPropertyMap().get(sourceProperty);
-            if(toChange == null) {
+            if (toChange == null) {
                 throw new RuntimeException("The property to change cannot be null.");
             }
             String changed = toChange.replaceAll("\\$\\s*\\{" + hierarchicalName + "\\s*\\:\\s*" + targetProperty + "}", targetVal);
             whereTochange.getPropertyMap().put(sourceProperty, changed);
         }
+    }
+
+    /**
+     * Adds a property change listener.
+     *
+     * @param listener The property change listener.
+     */
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.pcs.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Removes a property change listener.
+     *
+     * @param listener The property change listener to remove.
+     */
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.pcs.removePropertyChangeListener(listener);
     }
 
 }

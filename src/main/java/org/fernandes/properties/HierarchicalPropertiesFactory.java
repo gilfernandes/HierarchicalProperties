@@ -3,11 +3,11 @@
  */
 package org.fernandes.properties;
 
-import org.fernandes.properties.model.DefaultHierarchicalProperties;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.fernandes.properties.model.DefaultHierarchicalProperties;
 import org.fernandes.properties.model.IncludeType;
 import org.fernandes.properties.parser.HierarchicalPropertiesParser;
 import org.parboiled.Parboiled;
@@ -39,7 +39,7 @@ public class HierarchicalPropertiesFactory {
      * @throws IOException In case the hierarchical properties are found or not.
      */
     public static final HierarchicalProperties createInstance(Path inputPath) throws IOException {
-        return createInstance(inputPath, true);
+        return createInstance(inputPath, true, false);
     }
     
     /**
@@ -48,14 +48,20 @@ public class HierarchicalPropertiesFactory {
      * @param inputPath The input path.
      * @param dereference If {@code true} the hierarchical properties references are dereferenced,
      * else not.
+     * @param addReloader If {@code true} the hierarchical properties are reloaded
+     * when the file is changed.
      * @return an instance of the hierarchical properties
      * @throws IOException In case the hierarchical properties are found or not.
      */
-    public static final HierarchicalProperties createInstance(Path inputPath, boolean dereference) throws IOException {
+    public static final HierarchicalProperties createInstance(Path inputPath, boolean dereference, boolean addReloader) throws IOException {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         Files.copy(inputPath, bout);
         final String input = bout.toString("UTF-8");
-        return createInstance(input, dereference);
+        HierarchicalProperties props = createInstance(input, dereference);
+        if(addReloader) {
+            Reloader.INSTANCE.startReloadThread(inputPath, props);
+        }
+        return props;
     }
 
     /**

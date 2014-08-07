@@ -24,10 +24,24 @@ public class HierarchicalPreprocessorFactoryTest {
     public void setUp() {
     }
 
+    /**
+     * Preprocesses and instantiates the hierarchical properties.
+     */
     @Test
-    public void factory1() {
-        
+    public void factoryMapIf() {
         HierarchicalProperties props = HierarchicalPreprocessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_if_2.txt"));
+        PropertyNode testNode = props.getNode("/Test");
+        Assert.assertNotNull("testNode is null", testNode);
+        String key3 = testNode.getProperty("key3");
+        Assert.assertNotNull("key3 is null", key3);
+    }
+    
+    /**
+     * Preprocesses and instantiates the hierarchical properties.
+     */
+    @Test
+    public void factoryMapIfNested() {
+        HierarchicalProperties props = HierarchicalPreprocessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_if_nested.txt"));
         PropertyNode testNode = props.getNode("/Test");
         Assert.assertNotNull("testNode is null", testNode);
         String key3 = testNode.getProperty("key3");

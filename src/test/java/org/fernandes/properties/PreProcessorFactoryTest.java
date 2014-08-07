@@ -103,6 +103,35 @@ public class PreProcessorFactoryTest {
      * from the classpath, checks if the if condition works.
      */
     @Test
+    public void createInstanceCpAndIncludeClasspathWithDefIfNested() {
+        try {
+            String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_if_nested.txt"));
+            Assert.assertFalse("if 1 not resolved", included.contains("if:env == prod"));
+            Assert.assertFalse("if 2 not resolved", included.contains("if:system == sys1"));
+            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(included, true);
+            PropertyNode root = props.getNode("/");
+            Assert.assertNotNull("The root node is null", root);
+            PropertyNode testNode = props.getNode("/Test");
+            Assert.assertNotNull("Test node is null", testNode);
+            String key3 = testNode.getProperty("key3");
+            Assert.assertNotNull("key3 is null", key3);
+            String key4 = testNode.getProperty("key4");
+            Assert.assertNull("key4 is not null", key4);
+            String key5 = testNode.getProperty("key5");
+            Assert.assertNotNull("key5 is null", key5);
+            String keyDef = testNode.getProperty("keyDef");
+            Assert.assertNull("keyDef is not null", keyDef);
+        } catch (Exception e) {
+            Logger.getLogger(PreProcessorFactoryTest.class.getName()).log(Level.SEVERE, "Test fails", e);
+            Assert.fail(e.toString());
+        }
+    }
+    
+    /**
+     * Creates an instance of the preprocessor factory and performs the includes
+     * from the classpath, checks if the if condition works.
+     */
+    @Test
     public void createInstanceCpAndIncludeClasspathWithDefIfNot() {
         try {
             String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_not_if_1.txt"));

@@ -48,7 +48,7 @@ public class HierarchicalPropertiesFactoryTest {
      */
     public HierarchicalProperties createSample(final String sample) {
         try {
-            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(Paths.get(sample), true);
+            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(Paths.get(sample), true, false);
             PropertyNode helloNode = props.getNode("/Test/hello");
             Assert.assertNotNull("/Test/hello is null", helloNode);
             final String propsStr = props.toString();

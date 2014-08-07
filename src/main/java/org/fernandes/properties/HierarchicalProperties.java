@@ -4,6 +4,7 @@
 
 package org.fernandes.properties;
 
+import java.beans.PropertyChangeListener;
 import org.fernandes.properties.model.DefaultNode;
 import org.fernandes.properties.model.PropertyNode;
 
@@ -37,4 +38,24 @@ public interface HierarchicalProperties extends Iterable<DefaultNode> {
      * @return the node count. 
      */
     public int nodeCount();
+
+    /**
+     * Sets a new root.
+     * @param root The root to set.
+     */
+    void setRoot(PropertyNode root);
+
+    /**
+     * Adds a property change listener.
+     *
+     * @param listener The property change listener.
+     */
+    void addPropertyChangeListener(PropertyChangeListener listener);
+
+    /**
+     * Removes a property change listener.
+     *
+     * @param listener The property change listener to remove.
+     */
+    void removePropertyChangeListener(PropertyChangeListener listener);
 }
