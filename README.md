@@ -10,18 +10,22 @@ This project has also a serialiser. So now you can serialise and deserialise pro
 Pre-processor
 -------------
 
-As of now the pre-processor only has two features: it can process includes from the file system, 
-classpath or from the web using http and it can process defined constants. 
+As of now the pre-processor only has three features: it can process includes from the file system, 
+classpath or from the web using http, it can process defined constants and if clauses.
 
 The typical syntax for a classpath pre-processor include is:
 
 <code>!&lt;classpath://hierarchicalProperties/include1.txt&gt;</code>
 
-Ifs can also be included like this:
+This is how you define variables:
+
+<code>!<def:env=prod></code>
+
+If's can also be included like this:
 
 <code>!&lt;if:env == prod&gt;</code>
 
-or you can use not:
+or you can use negation:
 
 <code>!&lt;if:env != prod&gt;</code>
 
