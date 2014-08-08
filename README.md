@@ -19,7 +19,7 @@ The typical syntax for a classpath pre-processor include is:
 
 This is how you define variables:
 
-<code>!<def:env=prod></code>
+<code>!&lt;def:env=prod&gt;</code>
 
 If's can also be included like this:
 
