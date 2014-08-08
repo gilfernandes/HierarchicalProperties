@@ -11,7 +11,7 @@ Pre-processor
 -------------
 
 As of now the pre-processor only has three features: it can process includes from the file system, 
-classpath or from the web using http, it can process defined constants and if clauses.
+classpath or from the web using http, it can process defined constants and <tt>if</tt> <tt>else</tt> clauses.
 
 The typical syntax for a classpath pre-processor include is:
 
@@ -28,6 +28,8 @@ If's can also be included like this:
 or you can use negation:
 
 <code>!&lt;if:env != prod&gt;</code>
+
+<blockquote>Note: the preprocessor commands are all enclosed in "!&lt;&gt;".</blockquote>
 
 
 Properties - main features
