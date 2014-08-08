@@ -159,6 +159,17 @@ public class PreProcessorContainer {
     }
     
     /**
+     * Pops the top element from the stack.
+     *
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer ifElse() {
+        IfContainer curIf = ifStack.peek();
+        curIf.reverseMatch();
+        return this;
+    }
+    
+    /**
      * Associates the operator to the last if element on the stack.
      * @param operator The operator to associate to the last if element on the stack.
      * @return a reference to this object.

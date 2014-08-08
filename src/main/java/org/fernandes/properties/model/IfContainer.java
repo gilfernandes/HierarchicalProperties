@@ -90,6 +90,14 @@ public class IfContainer {
     public void setOperator(IfOperator operator) {
         this.operator = operator;
     }
+    
+    /**
+     * Just reverses the operator. {@code false} becomes {@code true} and
+     * {@code true} becomes {@code false}.
+     */
+    public void reverseMatch() {
+        this.operator = this.operator.getReverse();
+    }
 
     /**
      * Returns the string representation of this object.

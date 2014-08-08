@@ -48,7 +48,7 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
      * or an if component.
      */
     public Rule preprocessorCommand() {
-        return sequence("!<", firstOf(define(), include(), defineVal(), ifStart(), ifEnd()), ">");
+        return sequence("!<", firstOf(define(), include(), defineVal(), ifStart(), ifEnd(), ifElse()), ">");
     }
     
     /**
@@ -92,10 +92,22 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
                 oneOrMore(alphaNumericWithDot()), push(preProcessorContainer.ifStartVal(match())));
     }
     
+    /**
+     * The end of the if statement.
+     * @return a rule parsing the syntax of the end of the if statement.
+     */
     public Rule ifEnd() {
         return sequence(spaces(), "endif", push(preProcessorContainer.ifEnd()), spaces());
     }
     
+    
+    /**
+     * Returns a rule with the else start.
+     * @return a rule with the else start.
+     */
+    public Rule ifElse() {
+        return sequence(spaces(), "else", push(preProcessorContainer.ifEnd()), spaces());
+    }
     /**
      * Returns a rule for the content of a URL. Used in an include.
      * @return a rule for the content of a URL.

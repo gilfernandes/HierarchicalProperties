@@ -20,10 +20,20 @@ public enum IfOperator {
      */
     NOT("!=");
     
+    static {
+        EQUALS.setReverse(NOT);
+        NOT.setReverse(EQUALS);
+    }
+    
     /**
      * The sign of the operator.
      */
     String sign;
+    
+    /**
+     * The reverse operator.
+     */
+    private IfOperator reverse;
 
     /**
      * Associates a sign to this entity.
@@ -46,6 +56,22 @@ public enum IfOperator {
         }
         return null;
     }
-    
+
+    /**
+     * Sets the reverse of this operator.
+     * @param reverse The reverse of this operator.
+     */
+    public void setReverse(IfOperator reverse) {
+        this.reverse = reverse;
+    }
+
+    /**
+     * Returns the reverse of this operator.
+     * @return the reverse of this operator. 
+     */
+    public IfOperator getReverse() {
+        return reverse;
+    }
+
     
 }
