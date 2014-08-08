@@ -39,27 +39,29 @@ public enum Reloader {
             @Override
             public void run() {
                 Path dir = propsPath.getParent();
-                try {
-                    WatchService watcher = dir.getFileSystem().newWatchService();
-                    dir.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY);
-                    WatchKey watckKey = watcher.take();
-                    List<WatchEvent<?>> events = watckKey.pollEvents();
-                    events.stream().filter((event) -> (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY)).forEach((event) -> {
-                        WatchEvent.Kind<?> kind = event.kind();
-                        if (kind != OVERFLOW) {
-                            // The filename is the
-                            // context of the event.
-                            WatchEvent<Path> ev = (WatchEvent<Path>) event;
-                            Path filename = ev.context();
-                            final Path fileName = propsPath.getFileName();
-                            if (filename.equals(fileName)) {
-                                HierarchicalProperties reloadedProps = HierarchicalPreprocessorFactory.createInstance(propsPath);
-                                props.setRoot(reloadedProps.getRoot());
+                for (;;) {
+                    try {
+                        WatchService watcher = dir.getFileSystem().newWatchService();
+                        dir.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY);
+                        WatchKey watckKey = watcher.take();
+                        List<WatchEvent<?>> events = watckKey.pollEvents();
+                        events.stream().filter((event) -> (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY)).forEach((event) -> {
+                            WatchEvent.Kind<?> kind = event.kind();
+                            if (kind != OVERFLOW) {
+                                // The filename is the
+                                // context of the event.
+                                WatchEvent<Path> ev = (WatchEvent<Path>) event;
+                                Path filename = ev.context();
+                                final Path fileName = propsPath.getFileName();
+                                if (filename.equals(fileName)) {
+                                    HierarchicalProperties reloadedProps = HierarchicalPreprocessorFactory.createInstance(propsPath);
+                                    props.setRoot(reloadedProps.getRoot());
+                                }
                             }
-                        }
-                    });
-                } catch (IOException | InterruptedException e) {
-                    throw new RuntimeException(e);
+                        });
+                    } catch (IOException | InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }.start();

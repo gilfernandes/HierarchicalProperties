@@ -17,8 +17,7 @@ keyRef4  = ${/Test/hello:key4}
 # Here is a reference to key2 on the same node
 keyRef5 = ${/Test/hello/world:key4} ${/Test/hello/world:key4} ${/Test/hello/world:key6}
 /*  This is a multiline comment !!!!! 
-
-
+This is great.
 With another line.
 */
 [/Test/hello/world]
@@ -26,4 +25,5 @@ key4  = val4
 key6  = val6
 
 [/org/fernandes/properties/test]
-key7   : val 7
+key7   : val7
+key8   : val8

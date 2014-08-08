@@ -3,7 +3,7 @@ HierarchicalProperties
 
 Hierarchical Properties is a small project for a parser and serializer of enriched properties for Java 8. 
 
-It contains a parser for properties in a tree of nodes. It supports also node references and also allows includes via a pre-processor.
+It contains a parser for properties in a tree of nodes. It supports also node references and also allows includes and conditional statements via a pre-processor.
 
 This project has also a serialiser. So now you can serialise and deserialise properties.
 
@@ -17,6 +17,13 @@ The typical syntax for a classpath pre-processor include is:
 
 <code>!&lt;classpath://hierarchicalProperties/include1.txt&gt;</code>
 
+Ifs can also be included like this:
+
+<code>!&lt;if:env == prod&gt;</code>
+
+or you can use not:
+
+<code>!&lt;if:env != prod&gt;</code>
 
 
 Properties - main features

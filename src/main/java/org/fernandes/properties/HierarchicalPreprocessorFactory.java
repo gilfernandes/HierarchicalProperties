@@ -21,7 +21,24 @@ public class HierarchicalPreprocessorFactory {
      * @return an instance of hierarchical properties.
      */
     public static HierarchicalProperties createInstance(Path path) {
+        return createInstance(path, false);
+    }
+    
+    /**
+     * Creates an instance of hierarchical properties after preprocessing 
+     * the files.
+     * @param path The path to be preprocessed and then to be converted 
+     * to hierarchical properties.
+     * @param autoReload If {@code true} the hierarchical properties are reloaded
+     * when the file is changed.
+     * @return an instance of hierarchical properties.
+     */
+    public static HierarchicalProperties createInstance(Path path, boolean autoReload) {
         String included = PreProcessorFactory.createInstance(path);
-        return HierarchicalPropertiesFactory.createInstance(included, true);
+        HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(included, true);
+        if(autoReload) {
+            Reloader.INSTANCE.startReloadThread(path, props);
+        }
+        return props;
     }
 }
