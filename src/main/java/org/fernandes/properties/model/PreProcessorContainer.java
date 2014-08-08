@@ -165,7 +165,9 @@ public class PreProcessorContainer {
      */
     public PreProcessorContainer ifElse() {
         IfContainer curIf = ifStack.peek();
-        curIf.reverseMatch();
+        IfOperator reverse = curIf.reverseMatch();
+        curIf.setOperator(reverse);
+        curIf.setVariableValue(curIf.getVariableValue()); // re-evaluation of the match
         return this;
     }
     

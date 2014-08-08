@@ -106,7 +106,7 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
      * @return a rule with the else start.
      */
     public Rule ifElse() {
-        return sequence(spaces(), "else", push(preProcessorContainer.ifEnd()), spaces());
+        return sequence(spaces(), "else", push(preProcessorContainer.ifElse()), spaces());
     }
     /**
      * Returns a rule for the content of a URL. Used in an include.

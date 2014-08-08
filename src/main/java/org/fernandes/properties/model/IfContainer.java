@@ -94,9 +94,18 @@ public class IfContainer {
     /**
      * Just reverses the operator. {@code false} becomes {@code true} and
      * {@code true} becomes {@code false}.
+     * @return The reverse of this operator.
      */
-    public void reverseMatch() {
-        this.operator = this.operator.getReverse();
+    public IfOperator reverseMatch() {
+        return this.operator.getReverse();
+    }
+
+    /**
+     * Returns the value of a variable.
+     * @return the value of a variable. 
+     */
+    public String getVariableValue() {
+        return variableValue;
     }
 
     /**
