@@ -33,13 +33,13 @@ or you can use negation:
 
 This is how you use the if clause combined with the else clause:
 
-<code>!&lt;if:env == prod&gt;
-key3 = value3<br />
-!&lt;else&gt;<br />
-keyDef = !&lt;$env&gt;_val # First inclusion of pre-processor value.<br />
-keyDef2 = !&lt;$system&gt;_val # Second inclusion of pre-processor value.<br />
-!&lt;endif&gt;<br />
-</code>
+<pre>!&lt;if:env == prod&gt;
+key3 = value3
+!&lt;else&gt;
+keyDef = !&lt;$env&gt;_val # First inclusion of pre-processor value.
+keyDef2 = !&lt;$system&gt;_val # Second inclusion of pre-processor value.
+!&lt;endif&gt;
+</pre>
 
 
 Properties - main features
