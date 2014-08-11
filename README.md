@@ -34,11 +34,11 @@ or you can use negation:
 This is how you use the if clause combined with the else clause:
 
 <code>!&lt;if:env == prod&gt;
-key3 = value3
-!&lt;else&gt;
-keyDef = !&lt;$env&gt;_val # First inclusion of pre-processor value.
-keyDef2 = !&lt;$system&gt;_val # Second inclusion of pre-processor value.
-!<endif>
+key3 = value3&lt;br/&gt;
+!&lt;else&gt;&lt;br/&gt;
+keyDef = !&lt;$env&gt;_val # First inclusion of pre-processor value.&lt;br/&gt;
+keyDef2 = !&lt;$system&gt;_val # Second inclusion of pre-processor value.&lt;br/&gt;
+!&lt;endif&gt;&lt;br/&gt;
 </code>
 
 
