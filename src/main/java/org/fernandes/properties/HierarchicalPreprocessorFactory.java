@@ -21,7 +21,25 @@ public class HierarchicalPreprocessorFactory {
      * @return an instance of hierarchical properties.
      */
     public static HierarchicalProperties createInstance(Path path) {
+        if(path == null) {
+            return null;
+        }
         return createInstance(path, false);
+    }
+    
+    /**
+     * Creates an instance of hierarchical properties after preprocessing 
+     * the files.
+     * @param cp The classpath from which to include.
+     * @return an instance of hierarchical properties.
+     */
+    public static HierarchicalProperties createInstanceCp(String cp) {
+        if(cp == null) {
+            return null;
+        }
+        String preprocessed = PreProcessorFactory.createInstanceFromCp(cp);
+        HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(preprocessed, true);
+        return props;
     }
     
     /**
@@ -34,6 +52,9 @@ public class HierarchicalPreprocessorFactory {
      * @return an instance of hierarchical properties.
      */
     public static HierarchicalProperties createInstance(Path path, boolean autoReload) {
+        if(path == null) {
+            return null;
+        }
         String included = PreProcessorFactory.createInstance(path);
         HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(included, true);
         if(autoReload) {

@@ -31,6 +31,16 @@ or you can use negation:
 
 <blockquote>Note: the preprocessor commands are all enclosed in "!&lt;&gt;".</blockquote>
 
+This is how you use the if clause combined with the else clause:
+
+<code>!&lt;if:env == prod&gt;
+key3 = value3
+!&lt;else&gt;
+keyDef = !&lt;$env&gt;_val # First inclusion of pre-processor value.
+keyDef2 = !&lt;$system&gt;_val # Second inclusion of pre-processor value.
+!<endif>
+</code>
+
 
 Properties - main features
 --------------------------
