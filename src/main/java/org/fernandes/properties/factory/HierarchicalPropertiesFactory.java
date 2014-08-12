@@ -1,12 +1,14 @@
 /*
  OSSCUBE 2014
  */
-package org.fernandes.properties;
+package org.fernandes.properties.factory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.fernandes.properties.model.HierarchicalProperties;
+import org.fernandes.properties.Reloader;
 import org.fernandes.properties.model.DefaultHierarchicalProperties;
 import org.fernandes.properties.model.IncludeType;
 import org.fernandes.properties.parser.HierarchicalPropertiesParser;

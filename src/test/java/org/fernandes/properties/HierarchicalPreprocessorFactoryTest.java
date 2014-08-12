@@ -3,6 +3,8 @@
  */
 package org.fernandes.properties;
 
+import org.fernandes.properties.model.HierarchicalProperties;
+import org.fernandes.properties.factory.HierarchicalPreprocessorFactory;
 import java.nio.file.Paths;
 import junit.framework.Assert;
 import org.fernandes.properties.model.PropertyNode;

@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
-import org.fernandes.properties.HierarchicalProperties;
+import org.fernandes.properties.model.HierarchicalProperties;
 import org.fernandes.properties.model.DefaultNode;
 
 /**

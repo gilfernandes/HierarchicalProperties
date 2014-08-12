@@ -2,9 +2,10 @@
  OSSCUBE 2014
  */
 
-package org.fernandes.properties;
+package org.fernandes.properties.model;
 
 import java.beans.PropertyChangeListener;
+import org.fernandes.properties.NodeProcessFunction;
 import org.fernandes.properties.model.DefaultNode;
 import org.fernandes.properties.model.PropertyNode;
 

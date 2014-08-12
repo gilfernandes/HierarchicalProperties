@@ -3,6 +3,8 @@
  */
 package org.fernandes.properties;
 
+import org.fernandes.properties.model.HierarchicalProperties;
+import org.fernandes.properties.factory.HierarchicalPreprocessorFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;

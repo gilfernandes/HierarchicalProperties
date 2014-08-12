@@ -5,7 +5,7 @@
 package org.fernandes.properties.serialiser;
 
 import java.io.Writer;
-import org.fernandes.properties.HierarchicalProperties;
+import org.fernandes.properties.model.HierarchicalProperties;
 
 /**
  * Used to serialise Hierarchical properties.

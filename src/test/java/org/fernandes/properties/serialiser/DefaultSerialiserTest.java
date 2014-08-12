@@ -12,7 +12,7 @@ import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.Assert;
-import org.fernandes.properties.HierarchicalProperties;
+import org.fernandes.properties.model.HierarchicalProperties;
 import org.fernandes.properties.HierarchicalPropertiesFactoryTest;
 import org.junit.Before;
 import org.junit.Test;

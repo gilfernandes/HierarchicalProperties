@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.fernandes.properties.HierarchicalProperties;
 import org.fernandes.properties.NodeProcessFunction;
 import org.fernandes.properties.util.Indentor;
 

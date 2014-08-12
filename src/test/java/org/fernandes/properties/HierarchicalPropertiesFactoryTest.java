@@ -4,6 +4,8 @@
 
 package org.fernandes.properties;
 
+import org.fernandes.properties.model.HierarchicalProperties;
+import org.fernandes.properties.factory.HierarchicalPropertiesFactory;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.logging.Level;

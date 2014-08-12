@@ -37,7 +37,7 @@ public interface PropertyNode {
     /**
      * Returns a property as integer.
      * @param key The key from which we are retrieving the integer.
-     * @return a property as integer.
+     * @return a property as integer. Might return {@code null}.
      */
     public Integer getPropertyAsInt(String key);
     
@@ -49,6 +49,22 @@ public interface PropertyNode {
      * @return a property as integer.
      */
     public Integer getPropertyAsInt(String key, int defaultVal);
+    
+    /**
+     * Returns a property as double.
+     * @param key The key from which we are retrieving the integer.
+     * @return a property as double. Might return {@code null}.
+     */
+    public Double getPropertyAsDouble(String key);
+    
+    /**
+     * Returns a property as double.
+     * @param key The key from which we are retrieving the integer.
+     * @param defaultVal The default value, in case the property cannot be 
+     * retrieved.
+     * @return a property as double.
+     */
+    public Double getPropertyAsDouble(String key, int defaultVal);
     
     /**
      * Returns the map with all properties.

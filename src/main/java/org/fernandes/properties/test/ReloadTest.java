@@ -8,8 +8,8 @@ import java.beans.PropertyChangeEvent;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.fernandes.properties.HierarchicalPreprocessorFactory;
-import org.fernandes.properties.HierarchicalProperties;
+import org.fernandes.properties.factory.HierarchicalPreprocessorFactory;
+import org.fernandes.properties.model.HierarchicalProperties;
 
 /**
  * This kind of test does not work with JUNIT so well. This is just a manual 

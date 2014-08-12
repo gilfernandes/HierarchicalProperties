@@ -3,6 +3,8 @@
  */
 package org.fernandes.properties;
 
+import org.fernandes.properties.model.HierarchicalProperties;
+import org.fernandes.properties.factory.HierarchicalPropertiesFactory;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;

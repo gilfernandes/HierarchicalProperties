@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.regex.Pattern;
 
 /**
  * The node in the hierarchical properties.
@@ -17,6 +18,16 @@ import java.util.function.BiConsumer;
  * @author onepoint
  */
 public class DefaultNode implements PropertyNode {
+
+    /**
+     * Pattern used to recognise integer values.
+     */
+    private static final Pattern INT_PAT = Pattern.compile("\\d+");
+
+    /**
+     * Pattern used to recognise double values.
+     */
+    private static final Pattern DOUBLE_PAT = Pattern.compile("\\d+(\\.\\d+)?");
 
     /**
      * The root node name.
@@ -59,6 +70,23 @@ public class DefaultNode implements PropertyNode {
      * associated with single properties. The key is the position.
      */
     private final HashMap<Integer, List<String>> lineComments = new HashMap<>();
+    
+    /**
+     * Processes nodes in a specific way. Used to implement the strategy
+     * pattern.
+     *
+     * @author onepoint
+     */
+    @FunctionalInterface
+    private interface TypeProcessFunction<T> {
+
+        /**
+         * Interface used to process a node in a specific way.
+         *
+         * @param node The node to be processed.
+         */
+        public T process(String key);
+    }
 
     /**
      * Copy constructor.
@@ -188,6 +216,7 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * Deflates a list of lists.
+     *
      * @param toFlattenList The lists to be flattened in on single list.
      * @return a flattened view of a list.
      */
@@ -239,6 +268,7 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * Adds a comment at a specific position.
+     *
      * @param lineComments1 The comments multi-map.
      * @param pos The position for the key.
      * @param e The string to add to the list at a specific position.
@@ -329,36 +359,74 @@ public class DefaultNode implements PropertyNode {
 
     /**
      * Returns a property as integer.
+     *
      * @param key The key used to retrieve the integer.
-     * @return the property value as integer or {@code null} in case the 
+     * @return the property value as integer or {@code null} in case the
      * property cannot be found or is not an integer.
      */
     @Override
     public Integer getPropertyAsInt(String key) {
-        String val = getProperty(key);
-        if(val == null) {
-            return null;
-        }
-        val = val.trim();
-        if(val.matches("\\d+")) {
-            return Integer.parseInt(val);
-        }
-        return null;
+        return extractType(key, val -> {
+            return INT_PAT.matcher(val).matches() ? Integer.parseInt(val) : null;
+        });
     }
 
     /**
      * Returns a property as integer.
+     *
      * @param key The key from which we are retrieving the integer.
-     * @param defaultVal The default value, in case the property cannot be 
+     * @param defaultVal The default value, in case the property cannot be
      * retrieved.
      * @return a property as integer.
      */
     @Override
     public Integer getPropertyAsInt(String key, int defaultVal) {
         Integer res = this.getPropertyAsInt(key);
-        if(res == null) {
-            return defaultVal;
+        return res == null ? defaultVal : res;
+    }
+
+    /**
+     * Returns a property as double.
+     *
+     * @param key The key from which we are retrieving the integer.
+     * @return a property as double. Might return {@code null}.
+     */
+    @Override
+    public Double getPropertyAsDouble(String key) {
+        return extractType(key, val -> {
+            return DOUBLE_PAT.matcher(val).matches() ? Double.parseDouble(val) : null;
+        });
+    }
+
+    /**
+     * Processes the extraction of a generic type, like e.g. Double, Integer, etc.
+     * @param <T> The type being processed.
+     * @param key The key used for extraction.
+     * @param processFunction The function used to process the actual value from 
+     * a string to the actual type.
+     * @return an extracted value with a specific type or if extraction fails 
+     * {@code null}.
+     */
+    private <T> T extractType(String key, TypeProcessFunction<T> processFunction) {
+        String val = getProperty(key);
+        if (val == null) {
+            return null;
         }
-        return res;
+        val = val.trim();
+        return processFunction.process(val);
+    }
+
+    /**
+     * Returns a property as double.
+     *
+     * @param key The key from which we are retrieving the integer.
+     * @param defaultVal The default value, in case the property cannot be
+     * retrieved.
+     * @return a property as double.
+     */
+    @Override
+    public Double getPropertyAsDouble(String key, int defaultVal) {
+        Double res = this.getPropertyAsDouble(key);
+        return res == null ? defaultVal : res;
     }
 }
