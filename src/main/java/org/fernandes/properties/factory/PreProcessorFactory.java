@@ -1,7 +1,7 @@
 /*
  OSSCUBE 2014
  */
-package org.fernandes.properties;
+package org.fernandes.properties.factory;
 
 import org.fernandes.properties.model.PreProcessorContainer;
 import java.io.IOException;

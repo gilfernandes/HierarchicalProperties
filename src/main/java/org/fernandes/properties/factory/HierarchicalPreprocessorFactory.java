@@ -6,7 +6,6 @@ package org.fernandes.properties.factory;
 
 import java.nio.file.Path;
 import org.fernandes.properties.model.HierarchicalProperties;
-import org.fernandes.properties.PreProcessorFactory;
 import org.fernandes.properties.Reloader;
 
 /**

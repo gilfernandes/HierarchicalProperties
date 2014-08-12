@@ -75,3 +75,15 @@ With another line.
 */</pre>
 </li>
 </ul>
+
+Java Interfaces
+---------------
+
+There are three factories in this project:
+<ul>
+    <li>org.fernandes.properties.factory.PreProcessorFactory - To be used just to pre-process files.</li>
+    <li>org.fernandes.properties.factory.HierarchicalPropertiesFactory - 
+        To be used to instantiate the hierarchical properties data structure.</li>
+    <li>org.fernandes.properties.factory.HierarchicalPreprocessorFactory - 
+        To be used to pre-process and instantiate the hierarchical properties data structure at the same time.</li>
+</ul>

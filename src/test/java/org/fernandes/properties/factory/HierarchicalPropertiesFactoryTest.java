@@ -2,7 +2,7 @@
  OSSCUBE 2014
  */
 
-package org.fernandes.properties;
+package org.fernandes.properties.factory;
 
 import org.fernandes.properties.model.HierarchicalProperties;
 import org.fernandes.properties.factory.HierarchicalPropertiesFactory;
