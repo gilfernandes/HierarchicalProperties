@@ -64,7 +64,23 @@ public interface PropertyNode {
      * retrieved.
      * @return a property as double.
      */
-    public Double getPropertyAsDouble(String key, int defaultVal);
+    public Double getPropertyAsDouble(String key, double defaultVal);
+    
+    /**
+     * Returns a property as a {@code boolean}.
+     * @param key The key from which we are retrieving the integer.
+     * @return a property as {@code boolean}. Might return {@code null}.
+     */
+    public Boolean getPropertyAsBoolean(String key);
+    
+    /**
+     * Returns a property as {@code boolean}.
+     * @param key The key from which we are retrieving the integer.
+     * @param defaultVal The default value, in case the property cannot be 
+     * retrieved.
+     * @return a property as {@code boolean}.
+     */
+    public Boolean getPropertyAsBoolean(String key, boolean defaultVal);
     
     /**
      * Returns the map with all properties.

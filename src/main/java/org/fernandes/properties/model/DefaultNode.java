@@ -30,6 +30,11 @@ public class DefaultNode implements PropertyNode {
     private static final Pattern DOUBLE_PAT = Pattern.compile("\\d+(\\.\\d+)?");
 
     /**
+     * Pattern used to recognise double values.
+     */
+    private static final Pattern BOOLEAN_PAT = Pattern.compile("(true|false)", Pattern.CASE_INSENSITIVE);
+
+    /**
      * The root node name.
      */
     public static final String ROOT_NODE_NAME = "/";
@@ -70,7 +75,7 @@ public class DefaultNode implements PropertyNode {
      * associated with single properties. The key is the position.
      */
     private final HashMap<Integer, List<String>> lineComments = new HashMap<>();
-    
+
     /**
      * Processes nodes in a specific way. Used to implement the strategy
      * pattern.
@@ -399,12 +404,55 @@ public class DefaultNode implements PropertyNode {
     }
 
     /**
-     * Processes the extraction of a generic type, like e.g. Double, Integer, etc.
+     * Returns a property as double.
+     *
+     * @param key The key from which we are retrieving the integer.
+     * @param defaultVal The default value, in case the property cannot be
+     * retrieved.
+     * @return a property as double.
+     */
+    @Override
+    public Double getPropertyAsDouble(String key, double defaultVal) {
+        Double res = this.getPropertyAsDouble(key);
+        return res == null ? defaultVal : res;
+    }
+
+    /**
+     * Returns a property as a {@code boolean}.
+     *
+     * @param key The key from which we are retrieving the integer.
+     * @return a property as {@code boolean}. Might return {@code null}.
+     */
+    @Override
+    public Boolean getPropertyAsBoolean(String key) {
+        return extractType(key, val -> {
+            return BOOLEAN_PAT.matcher(val).matches() ? Boolean.parseBoolean(val) : null;
+        });
+    }
+
+    /**
+     * Returns a property as {@code boolean}.
+     *
+     * @param key The key from which we are retrieving the integer.
+     * @param defaultVal The default value, in case the property cannot be
+     * retrieved.
+     * @return a property as {@code boolean}.
+     */
+    @Override
+    public Boolean getPropertyAsBoolean(String key, boolean defaultVal) {
+        Boolean res = this.getPropertyAsBoolean(key);
+        return res == null ? defaultVal : res;
+    }
+
+    /**
+     * Processes the extraction of a generic type, like e.g. Double, Integer,
+     * etc.
+     *
      * @param <T> The type being processed.
      * @param key The key used for extraction.
-     * @param processFunction The function used to process the actual value from 
+     * @param processFunction The function used to process the actual value from
      * a string to the actual type.
-     * @return an extracted value with a specific type or if extraction fails 
+     * @return an extracted value with a specific type or if extraction fails
      * {@code null}.
      */
     private <T> T extractType(String key, TypeProcessFunction<T> processFunction) {
@@ -414,19 +462,5 @@ public class DefaultNode implements PropertyNode {
         }
         val = val.trim();
         return processFunction.process(val);
-    }
-
-    /**
-     * Returns a property as double.
-     *
-     * @param key The key from which we are retrieving the integer.
-     * @param defaultVal The default value, in case the property cannot be
-     * retrieved.
-     * @return a property as double.
-     */
-    @Override
-    public Double getPropertyAsDouble(String key, int defaultVal) {
-        Double res = this.getPropertyAsDouble(key);
-        return res == null ? defaultVal : res;
     }
 }

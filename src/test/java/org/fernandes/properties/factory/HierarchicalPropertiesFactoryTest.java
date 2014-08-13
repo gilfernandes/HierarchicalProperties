@@ -4,12 +4,11 @@
 
 package org.fernandes.properties.factory;
 
-import org.fernandes.properties.model.HierarchicalProperties;
-import org.fernandes.properties.factory.HierarchicalPropertiesFactory;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.fernandes.properties.model.HierarchicalProperties;
 import org.fernandes.properties.model.PropertyNode;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +19,7 @@ import org.junit.Test;
  */
 //@Ignore
 public class HierarchicalPropertiesFactoryTest {
-    
+
     /**
      * Tests a parsing hierarchical properties with de-referencing.
      */
@@ -28,7 +27,7 @@ public class HierarchicalPropertiesFactoryTest {
     public void testHierarchicalPropertiesFactory() {
         createSample("src/test/resources/hierarchicalProperties/map_sample.txt");
     }
-    
+
     /**
      * Tests a parsing hierarchical properties with de-referencing from the classpath.
      */
@@ -59,7 +58,7 @@ public class HierarchicalPropertiesFactoryTest {
             Assert.assertTrue(String.format("Node %s does not contain a line format.", helloNode), helloNode.sizeMultilineComment() > 0);
             helloNode.iteratorMultilineComment().forEachRemaining((c) -> System.out.println("multiline :::" + c));
             helloNode.iteratorLineComment().forEachRemaining((c) -> System.out.println("single line:::" + c));
-            
+
             PropertyNode fernandesNode = props.getNode("/org/fernandes/properties/test");
             Assert.assertNotNull("Fernandes node not found", fernandesNode);
             fernandesNode.getChildren();
