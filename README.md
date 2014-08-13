@@ -87,3 +87,21 @@ There are three factories in this project:
     <li><a href="https://github.com/gilfernandes/HierarchicalProperties/blob/master/src/main/java/org/fernandes/properties/factory/HierarchicalPreprocessorFactory.java">org.fernandes.properties.factory.HierarchicalPreprocessorFactory</a> - 
         To be used to pre-process and instantiate the hierarchical properties data structure at the same time.</li>
 </ul>
+
+Here is a simple JUnit based example on how to use these the <code>HierarchicalPreprocessorFactory</code>:
+
+```java
+HierarchicalProperties props = HierarchicalPreprocessorFactory.createInstanceCp("hierarchicalProperties/map_if_types.txt");
+org.junit.Assert.assertNotNull("The properties are null", props);
+PropertyNode testProps = props.getNode("/Test");
+Assert.assertNotNull("Test is null", props);
+Boolean keyBoolean = testProps.getPropertyAsBoolean("keyBoolean");
+Assert.assertNotNull("keyBoolean is null", keyBoolean);
+Assert.assertTrue("keyBoolean is not true", keyBoolean);
+Double keyDouble = testProps.getPropertyAsDouble("keyDouble");
+Assert.assertNotNull("keyDouble is null", keyDouble);
+Assert.assertTrue("keyDouble is not 2.345", keyDouble == 2.345);
+Integer keyInt = testProps.getPropertyAsInt("keyInt");
+Assert.assertNotNull("keyInt is null", keyInt);
+Assert.assertTrue("keyInt is not 123", keyInt == 123);
+```
