@@ -1,0 +1,16 @@
+# Used to test the classpath include.
+!<def:env=staging>
+!<def:system=sys1>
+key2 = value2 !!!
+key3 = ${SYS.java.vendor.url}
+!<classpath://hierarchicalProperties/include1.txt>
+
+[/Test]
+!<if:env == prod>
+key3 = value3
+!<elseif:env == staging>
+keyStaging = valueStaging
+!<else>
+keyDef = !<$env>_val # First inclusion of pre-processor value.
+keyDef2 = !<$system>_val # Second inclusion of pre-processor value.
+!<endif>

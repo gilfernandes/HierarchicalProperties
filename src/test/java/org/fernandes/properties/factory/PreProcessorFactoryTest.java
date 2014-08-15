@@ -3,9 +3,6 @@
  */
 package org.fernandes.properties.factory;
 
-import org.fernandes.properties.factory.PreProcessorFactory;
-import org.fernandes.properties.model.HierarchicalProperties;
-import org.fernandes.properties.factory.HierarchicalPropertiesFactory;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -16,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import junit.framework.Assert;
+import org.fernandes.properties.model.HierarchicalProperties;
 import org.fernandes.properties.model.PropertyNode;
 import org.junit.Test;
 
@@ -76,7 +74,7 @@ public class PreProcessorFactoryTest {
             Assert.fail(e.toString());
         }
     }
-    
+
     /**
      * Creates an instance of the preprocessor factory and performs the includes
      * from the classpath, checks if the if condition works.
@@ -100,7 +98,7 @@ public class PreProcessorFactoryTest {
             Assert.fail(e.toString());
         }
     }
-    
+
     /**
      * Creates an instance of the preprocessor factory and performs the includes
      * from the classpath, checks if the if condition works.
@@ -149,7 +147,7 @@ public class PreProcessorFactoryTest {
             Assert.fail(e.toString());
         }
     }
-    
+
     /**
      * Creates an instance of the preprocessor factory and performs the includes
      * from the classpath, checks if the if condition works.
@@ -178,7 +176,36 @@ public class PreProcessorFactoryTest {
             Assert.fail(e.toString());
         }
     }
-    
+
+    /**
+     * Creates an instance of the preprocessor factory and performs the includes
+     * from the classpath, checks if the if conditions work.
+     */
+    @Test
+    public void createInstanceCpAndIncludeClasspathWithDefIfElseIf() {
+        try {
+            String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_if_else_elseif.txt"));
+            Assert.assertFalse("if 1 not resolved", included.contains("if:env == staging"));
+            Assert.assertFalse("elseif not resolved", included.contains("elseif:env == staging"));
+            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(included, true);
+            PropertyNode root = props.getNode("/");
+            Assert.assertNotNull("The root node is null", root);
+            PropertyNode testNode = props.getNode("/Test");
+            Assert.assertNotNull("Test node is null", testNode);
+            String key3 = testNode.getProperty("key3");
+            Assert.assertNull("key3 is not null", key3);
+            String keyStaging = testNode.getProperty("keyStaging");
+            Assert.assertNotNull("keyStaging is null", keyStaging);
+            String keyDef = testNode.getProperty("keyDef");
+            Assert.assertNull("keyDef is not null", keyDef);
+            String keyDef2 = testNode.getProperty("keyDef2");
+            Assert.assertNull("keyDef2 is not null", keyDef2);
+        } catch (Exception e) {
+            Logger.getLogger(PreProcessorFactoryTest.class.getName()).log(Level.SEVERE, "Test fails", e);
+            Assert.fail(e.toString());
+        }
+    }
+
     /**
      * Creates an instance of the preprocessor factory and performs the includes
      * from the classpath, checks if the if condition works.

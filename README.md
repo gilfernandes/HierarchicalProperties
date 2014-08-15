@@ -29,6 +29,10 @@ or you can use negation:
 
 <code>!&lt;if:env != prod&gt;</code>
 
+Else if is also possible, like this:
+
+<code>!&lt;elseif:env == staging&gt;</code>
+
 <blockquote>Note: the preprocessor commands are all enclosed in "!&lt;&gt;".</blockquote>
 
 This is how you use the if clause combined with the else clause:

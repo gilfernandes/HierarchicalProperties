@@ -107,7 +107,6 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
         return ifRule(ELSEIF_TOKEN);
     }
 
-
     /**
      * Example: !<if:env == prod>
      * @param prefix The prefix for this operation. Can be "if" for example.
