@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +38,7 @@ public enum IncludeType implements IncludeProcessor {
                         Path p = Paths.get(url.toURI());
                         byte[] bytes = Files.readAllBytes(p);
                         return new String(bytes, "UTF-8");
-                    } catch (Exception ex) {
+                    } catch (URISyntaxException | IOException ex) {
                         Logger.getLogger(IncludeType.class.getName()).log(Level.SEVERE, null, ex);
                         throw new RuntimeException(ex);
                     }

@@ -3,8 +3,6 @@
  */
 package org.fernandes.properties;
 
-import org.fernandes.properties.model.HierarchicalProperties;
-import org.fernandes.properties.factory.HierarchicalPreprocessorFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
@@ -13,6 +11,8 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.List;
+import org.fernandes.properties.factory.HierarchicalPreprocessorFactory;
+import org.fernandes.properties.model.HierarchicalProperties;
 
 /**
  * Used to reload the hierarchical properties in case of need.
@@ -20,7 +20,10 @@ import java.util.List;
  * @author onepoint
  */
 public enum Reloader {
-    
+
+    /**
+     * Singleton instance.
+     */
     INSTANCE;
 
     /**
@@ -32,10 +35,10 @@ public enum Reloader {
     public void startReloadThread(Path propsPath, HierarchicalProperties props) {
 
         new Thread() {
-            
+
             /**
-             * Watches a directory to see, if there was a modification on the 
-             * properties file and if there is one, simply reloads the file and 
+             * Watches a directory to see, if there was a modification on the
+             * properties file and if there is one, simply reloads the file and
              * resets the root.
              */
             @Override

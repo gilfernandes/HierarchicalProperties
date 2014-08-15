@@ -20,14 +20,14 @@ public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarch
      * The domain object to be filled with data.
      */
     DefaultHierarchicalProperties props = new DefaultHierarchicalProperties();
-    
+
     public Rule main() {
         return sequence(lines(), EOI);
     }
 
     public Rule lines() {
         return oneOrMore(mainElement());
-                
+
     }
 
     public Rule mainElement() {
@@ -42,7 +42,7 @@ public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarch
     public Rule expression() {
         return sequence(
                 alphaNumerics(), push(props.putKey(match())),
-                separator(), 
+                separator(),
                 value(), push(props.putValue(match()))
         );
     }
@@ -51,7 +51,7 @@ public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarch
     public Rule alphaNumerics() {
         return oneOrMore(alphaNumeric());
     }
-    
+
     @SuppressSubnodes
     public Rule value() {
         // Supports multiline values using FirstOf
@@ -65,7 +65,7 @@ public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarch
     public Rule separator() {
         return sequence(zeroOrMore(' '), firstOf(':', '='), zeroOrMore(' '));
     }
-    
+
     /**
      * Extract one system environment property which is to be injected, like e.g $PATH.
      * @return rule for extraction of one system environment property which is to be injected, like e.g $PATH.
@@ -73,7 +73,7 @@ public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarch
     public Rule ENV() {
         return ELRule("ENV");
     }
-    
+
     /**
      * Extract one system environment property which is to be injected, like e.g $PATH.
      * @return rule for extraction of one system environment property which is to be injected, like e.g $PATH.
@@ -81,7 +81,7 @@ public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarch
     public Rule SYS() {
         return ELRule("SYS");
     }
-    
+
     /**
      * Extracts the expression language variables. Supports "ENV" or "SYS" variables.
      * @param classProp The class of the value to change ("ENV or "SYS").
@@ -90,16 +90,17 @@ public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarch
     public Rule ELRule(java.lang.String classProp) {
         return sequence("${", classProp, '.', oneOrMore(alphaNumericWithDot()), push(props.putCurEnvVarMap(classProp, match())), "}");
     }
-    
+
     public Rule reference() {
-        return sequence("$", "{", oneOrMore(firstOf(alphaNumeric(), '.', '/')), push(props.putReferenceNode(match())), 
+        return sequence("$", "{", oneOrMore(firstOf(alphaNumeric(), '.', '/')), push(props.putReferenceNode(match())),
                         separator(), oneOrMore(alphaNumericWithDot()), push(props.putReferenceValue(match())), "}");
     }
-    
+
     public Rule blankLine() {
         return sequence(spaces(), newline());
     }
 
+    @Override
     public Rule spaces() {
         return zeroOrMore(spacechar());
     }
@@ -111,20 +112,20 @@ public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarch
     public Rule newline() {
         return firstOf('\n', sequence('\r', optional('\n')));
     }
-    
+
     public Rule comment() {
-        return sequence(zeroOrMore(' '), firstOf("//", "#"), zeroOrMore(generalText()), 
+        return sequence(zeroOrMore(' '), firstOf("//", "#"), zeroOrMore(generalText()),
                 push(props.addLineComment(match())), newline());
     }
-    
+
     public Rule multilineComment() {
         return sequence("/*", zeroOrMore(testNot("*/"), ANY), push(props.addMultilineComment(match())), "*/");
     }
-    
+
     public Rule categoryNode() {
-        return sequence(zeroOrMore(' '), ch('['), zeroOrMore(' '), optional('/'), 
+        return sequence(zeroOrMore(' '), ch('['), zeroOrMore(' '), optional('/'),
                 zeroOrMore(alphaNumerics(), optional(ch('/'))), push(props.createNodes(match())),
-                ch(']'), 
+                ch(']'),
                 zeroOrMore(' '), zeroOrMore(newline()));
     }
 }
