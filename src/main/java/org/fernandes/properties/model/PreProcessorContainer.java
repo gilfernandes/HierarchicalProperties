@@ -80,6 +80,11 @@ public class PreProcessorContainer {
         return this;
     }
 
+    /**
+     * Adds a key for a constant.
+     * @param key The key for the constant.
+     * @return a reference to this object.
+     */
     public PreProcessorContainer addConstantKey(String key) {
         if (doProcess()) {
             this.constantKey = key;
@@ -130,6 +135,18 @@ public class PreProcessorContainer {
     }
 
     /**
+     * Gets the current if container from the stack and replaces the variable in it.
+     *
+     * @param variable The variable of the if statement.
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer elseIfStartVar(String variable) {
+        IfContainer ifContainer = ifStack.peek();
+        ifContainer.setVariable(variable);
+        return this;
+    }
+
+    /**
      * Adds the evaluation expression to the if on top of the stack. And
      * performs the evaluation.
      *
@@ -157,7 +174,7 @@ public class PreProcessorContainer {
         ifStack.pop();
         return this;
     }
-    
+
     /**
      * Pops the top element from the stack.
      *
@@ -170,7 +187,7 @@ public class PreProcessorContainer {
         curIf.setVariableValue(curIf.getVariableValue()); // re-evaluation of the match
         return this;
     }
-    
+
     /**
      * Associates the operator to the last if element on the stack.
      * @param operator The operator to associate to the last if element on the stack.

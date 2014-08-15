@@ -5,7 +5,7 @@
 package org.fernandes.properties.model;
 
 import java.beans.PropertyChangeListener;
-import org.fernandes.properties.NodeProcessFunction;
+import org.fernandes.properties.function.NodeProcessFunction;
 
 /**
  * Contains the public methods of all hierarchical properties.

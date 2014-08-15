@@ -2,7 +2,7 @@
  OSSCUBE 2014
  */
 
-package org.fernandes.properties;
+package org.fernandes.properties.function;
 
 import org.fernandes.properties.model.DefaultNode;
 
