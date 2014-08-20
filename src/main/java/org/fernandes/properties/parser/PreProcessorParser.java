@@ -4,6 +4,7 @@
 
 package org.fernandes.properties.parser;
 
+import org.fernandes.properties.model.ExternalEnvironment;
 import static org.fernandes.properties.model.IncludeType.CLASSPATH;
 import static org.fernandes.properties.model.IncludeType.FILE;
 import static org.fernandes.properties.model.IncludeType.HTTP;
@@ -26,6 +27,16 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
      * Used for the else if statements.
      */
     private static final java.lang.String ELSEIF_TOKEN = "elseif";
+
+    /**
+     * The system prefix.
+     */
+    static final java.lang.String SYS_PREFIX = ExternalEnvironment.SYS + ".";
+
+    /**
+     * The environment prefix.
+     */
+    static final java.lang.String ENV_PREFIX = ExternalEnvironment.ENV + ".";
 
     /**
      * The container used with the preprocessor content.
@@ -87,9 +98,13 @@ public class PreProcessorParser extends AbstractParser<PreProcessorContainer> {
      * @return a define to be inserted.
      */
     public Rule defineVal() {
-        return sequence(spaces(), "$", oneOrMore(alphaNumericWithDot()),
-                push(preProcessorContainer.addDefineVal(match())), spaces());
+        final Rule varVal = oneOrMore(alphaNumericWithDot());
+        return sequence(spaces(), "$", firstOf(
+                sequence(ENV_PREFIX, varVal),
+                sequence(SYS_PREFIX, varVal),
+                varVal), push(preProcessorContainer.addDefineVal(match())), spaces());
     }
+
 
     /**
      * Example: !<if:env == prod>

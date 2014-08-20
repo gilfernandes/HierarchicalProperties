@@ -112,7 +112,7 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
      * @return this object
      */
     public DefaultHierarchicalProperties putValue(String value) {
-
+        System.out.println("+++ " + value);
         for (Map.Entry<String, Map<String, String>> entry : elVarMap.entrySet()) {
             for (Map.Entry<String, String> subEntry : entry.getValue().entrySet()) {
                 String toReplace = String.format("\\$\\{%s\\.%s\\}", entry.getKey(), subEntry.getKey());
@@ -120,7 +120,7 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
             }
         }
         LOG.log(Level.INFO, "Key: {0} :: Value: {1}", new String[]{curKey, value});
-        this.put(curKey, value);
+        this.put(curKey, value.trim());
         return this;
     }
 
@@ -139,11 +139,11 @@ public class DefaultHierarchicalProperties implements HierarchicalProperties {
             varMap = new HashMap<>();
             this.elVarMap.put(mapKey, varMap);
         }
-        switch (mapKey) {
-            case "ENV":
+        switch (ExternalEnvironment.valueOf(mapKey)) {
+            case ENV:
                 varMap.put(value, System.getenv(value));
                 break;
-            case "SYS":
+            case SYS:
                 varMap.put(value, System.getProperty(value));
                 break;
         }

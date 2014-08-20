@@ -82,6 +82,7 @@ public class PreProcessorContainer {
 
     /**
      * Adds a key for a constant.
+     *
      * @param key The key for the constant.
      * @return a reference to this object.
      */
@@ -114,8 +115,50 @@ public class PreProcessorContainer {
      */
     public PreProcessorContainer addDefineVal(String key) {
         if (doProcess()) {
-            if (constantMap.containsKey(key)) {
+            if (key.startsWith(ExternalEnvironment.ENV.toString())) {
+                addEnvVal(key);
+            } else if (key.startsWith(ExternalEnvironment.SYS.toString())) {
+                addSystemVal(key);
+            } else if (constantMap.containsKey(key)) {
                 String value = constantMap.get(key);
+                if (value != null) {
+                    preprocessedText.append(value.trim());
+                }
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Adds a value of a define from the OS environment.
+     *
+     * @param key The key that should be an environment variable. If the key is
+     * not in the it will be ignored.
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer addEnvVal(String key) {
+        if (doProcess()) {
+            String realKey = key.replaceFirst("^" + ExternalEnvironment.ENV + ".", "");
+            String value = System.getenv(realKey);
+            if (value != null) {
+                preprocessedText.append(value);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Adds a value of a define from the Java properties.
+     *
+     * @param key The key that should be a Java properties variable. If the key
+     * is not in the it will be ignored.
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer addSystemVal(String key) {
+        if (doProcess()) {
+            String realKey = key.replaceFirst("^" + ExternalEnvironment.SYS + ".", "");
+            String value = System.getProperty(realKey);
+            if (value != null) {
                 preprocessedText.append(value);
             }
         }
@@ -135,7 +178,8 @@ public class PreProcessorContainer {
     }
 
     /**
-     * Gets the current if container from the stack and replaces the variable in it.
+     * Gets the current if container from the stack and replaces the variable in
+     * it.
      *
      * @param variable The variable of the if statement.
      * @return a reference to this object.
@@ -158,7 +202,7 @@ public class PreProcessorContainer {
         ifContainer.setValue(value);
         String variable = ifContainer.getVariable();
         String variableVal = constantMap.get(variable);
-        if(variableVal == null) {
+        if (variableVal == null) {
             throw new IllegalArgumentException(String.format("%s was not defined.", variable));
         }
         ifContainer.setVariableValue(variableVal);
@@ -190,7 +234,9 @@ public class PreProcessorContainer {
 
     /**
      * Associates the operator to the last if element on the stack.
-     * @param operator The operator to associate to the last if element on the stack.
+     *
+     * @param operator The operator to associate to the last if element on the
+     * stack.
      * @return a reference to this object.
      */
     public PreProcessorContainer ifOperator(String operator) {

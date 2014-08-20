@@ -12,14 +12,19 @@ import org.fernandes.properties.factory.HierarchicalPreprocessorFactory;
 import org.fernandes.properties.model.HierarchicalProperties;
 
 /**
- * This kind of test does not work with JUNIT so well. This is just a manual 
+ * This kind of test does not work with JUNIT so well. This is just a manual
  * test for the reloading of the properties. This test ends after 90 seconds.
- * So in that time you can go an change the properties file and see it being 
+ * So in that time you can go an change the properties file and see it being
  * reloaded.
  * @author onepoint
  */
 public class ReloadTest {
-    
+
+    /**
+     * To test this, you will need to manually change and save the file.
+     * immediately after that the properties should change.
+     * @param args Not used.
+     */
     public static void main(String[] args) {
         try {
             HierarchicalProperties props = HierarchicalPreprocessorFactory.createInstance(
@@ -43,7 +48,7 @@ public class ReloadTest {
                         }
                     }
                 }
-                
+
             };
             t.setDaemon(false);
             t.start();

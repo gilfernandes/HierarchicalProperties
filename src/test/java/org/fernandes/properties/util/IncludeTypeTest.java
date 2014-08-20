@@ -48,7 +48,7 @@ public class IncludeTypeTest {
         URL url = new URL("http://docs.oracle.com/javase/7/docs/api/java/nio/Buffer.html#flip()");
         checkInclude(IncludeType.HTTP, url);
     }
-    
+
     /**
      * Tests the method for including from HTTP.
      * @throws java.net.MalformedURLException

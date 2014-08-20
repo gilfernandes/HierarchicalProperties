@@ -445,6 +445,31 @@ public class DefaultNode implements PropertyNode {
     }
 
     /**
+     * Returns a property as a {@code float}.
+     * @param key The key from which we are retrieving the integer.
+     * @return a property as {@code boolean}. Might return {@code null}.
+     */
+    @Override
+    public Float getPropertyAsFloat(String key) {
+        return extractType(key, val -> {
+            return DOUBLE_PAT.matcher(val).matches() ? Float.parseFloat(val) : null;
+        });
+    }
+
+    /**
+     * Returns a property as {@code boolean}.
+     * @param key The key from which we are retrieving the integer.
+     * @param defaultVal The default value, in case the property cannot be
+     * retrieved.
+     * @return a property as {@code boolean}.
+     */
+    @Override
+    public Float getPropertyAsFloat(String key, float defaultVal) {
+        Float res = this.getPropertyAsFloat(key);
+        return res == null ? defaultVal : res;
+    }
+
+    /**
      * Processes the extraction of a generic type, like e.g. Double, Integer,
      * etc.
      *

@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
  * @author onepoint
  */
 public interface PropertyNode {
-    
+
     /**
      * Returns a property value corresponding to {@code key} or
      * {@code null}, if the value was not found.
@@ -22,7 +22,7 @@ public interface PropertyNode {
      * {@code null}, if the value was not found.
      */
     public String getProperty(String key);
-    
+
     /**
      * Returns a property value corresponding to {@code key} or
      * {@code defaultVal}, if the value was not found.
@@ -33,61 +33,77 @@ public interface PropertyNode {
      * {@code defaultVal}, if the value was not found.
      */
     public String getProperty(String key, String defaultVal);
-    
+
     /**
      * Returns a property as integer.
      * @param key The key from which we are retrieving the integer.
      * @return a property as integer. Might return {@code null}.
      */
     public Integer getPropertyAsInt(String key);
-    
+
     /**
      * Returns a property as integer.
      * @param key The key from which we are retrieving the integer.
-     * @param defaultVal The default value, in case the property cannot be 
+     * @param defaultVal The default value, in case the property cannot be
      * retrieved.
      * @return a property as integer.
      */
     public Integer getPropertyAsInt(String key, int defaultVal);
-    
+
     /**
      * Returns a property as double.
      * @param key The key from which we are retrieving the integer.
      * @return a property as double. Might return {@code null}.
      */
     public Double getPropertyAsDouble(String key);
-    
+
     /**
      * Returns a property as double.
      * @param key The key from which we are retrieving the integer.
-     * @param defaultVal The default value, in case the property cannot be 
+     * @param defaultVal The default value, in case the property cannot be
      * retrieved.
      * @return a property as double.
      */
     public Double getPropertyAsDouble(String key, double defaultVal);
-    
+
     /**
      * Returns a property as a {@code boolean}.
      * @param key The key from which we are retrieving the integer.
      * @return a property as {@code boolean}. Might return {@code null}.
      */
     public Boolean getPropertyAsBoolean(String key);
-    
+
     /**
      * Returns a property as {@code boolean}.
      * @param key The key from which we are retrieving the integer.
-     * @param defaultVal The default value, in case the property cannot be 
+     * @param defaultVal The default value, in case the property cannot be
      * retrieved.
      * @return a property as {@code boolean}.
      */
     public Boolean getPropertyAsBoolean(String key, boolean defaultVal);
-    
+
+    /**
+     * Returns a property as a {@code float}.
+     * @param key The key from which we are retrieving the integer.
+     * @return a property as {@code boolean}. Might return {@code null}.
+     */
+    public Float getPropertyAsFloat(String key);
+
+    /**
+     * Returns a property as {@code boolean}.
+     * @param key The key from which we are retrieving the integer.
+     * @param defaultVal The default value, in case the property cannot be
+     * retrieved.
+     * @return a property as {@code boolean}.
+     */
+    public Float getPropertyAsFloat(String key, float defaultVal);
+
     /**
      * Returns the map with all properties.
      * @return the map with all properties.
      */
     public Map<String, String> getPropertyMap();
-    
+
     /**
      * Returns the name.
      * @return the name.
@@ -105,19 +121,19 @@ public interface PropertyNode {
      * @return an iterator for the multi-line comments.
      */
     public Iterator<String> iteratorMultilineComment();
-    
+
     /**
      * Returns an iterator for the multi-line comments.
      * @return an iterator for the multi-line comments.
      */
     public Iterator<String> iteratorLineComment();
-    
+
     /**
      * Returns the children of the current node.
-     * @return the children of the current node. 
+     * @return the children of the current node.
      */
     public Map<String, DefaultNode> getChildren();
-    
+
     /**
      * Returns the size of the multi-line comment.
      * @return the size of the multi-line comment.

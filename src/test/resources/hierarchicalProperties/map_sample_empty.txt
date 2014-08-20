@@ -1,0 +1,12 @@
+# Used to test the classpath include.
+
+
+key2 = value2 !!!
+key3 = ${SYS.java.vendor.url}
+includeKey1 = includeValue1
+
+[/Test]
+key3 = value3
+keyDef = prod_val # Product value
+keyDef2 = sys1_val #test
+keyNoComment = 123\#test #An now another comment

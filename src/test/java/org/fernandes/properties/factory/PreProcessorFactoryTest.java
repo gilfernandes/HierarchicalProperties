@@ -228,6 +228,29 @@ public class PreProcessorFactoryTest {
 
     /**
      * Creates an instance of the preprocessor factory and performs the includes
+     * from the classpath, checks if the if condition works.
+     */
+    @Test
+    public void createInstanceDefineExternalVars() {
+        try {
+            String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_define_external_vars.txt"));
+            Assert.assertTrue("key2 has not been found in preprocessed string.", included.contains("key2"));
+            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(included, true);
+            PropertyNode root = props.getNode("/");
+            Assert.assertNotNull("The root node is null", root);
+            PropertyNode testNode = props.getNode("/Test");
+            Assert.assertNotNull("Test node is null", testNode);
+            String keyDef = testNode.getProperty("keyDef");
+            Assert.assertNotNull("keyDef is null", keyDef);
+            Assert.assertEquals("keyDef is not 'prod_val'", "prod_val", keyDef);
+        } catch (Exception e) {
+            Logger.getLogger(PreProcessorFactoryTest.class.getName()).log(Level.SEVERE, "Test fails", e);
+            Assert.fail(e.toString());
+        }
+    }
+
+    /**
+     * Creates an instance of the preprocessor factory and performs the includes
      * from the classpath.
      */
     @Test
