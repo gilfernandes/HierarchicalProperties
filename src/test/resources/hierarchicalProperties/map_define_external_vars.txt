@@ -9,5 +9,5 @@ key3 = ${SYS.java.vendor.url}
 key3 = value3
 keyDef = !<$env>_val
 keyDef2 = !<$system>_val
-keyPath = !<$ENV.PATH>
-keyOsName = !<$SYS.os.name>
+keyPath = !<$ENV.PATH> # External preprocessor variable 1
+keyOsName = !<$SYS.os.name> # External preprocessor variable 1

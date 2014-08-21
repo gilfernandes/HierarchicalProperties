@@ -243,6 +243,11 @@ public class PreProcessorFactoryTest {
             String keyDef = testNode.getProperty("keyDef");
             Assert.assertNotNull("keyDef is null", keyDef);
             Assert.assertEquals("keyDef is not 'prod_val'", "prod_val", keyDef);
+            String keyPath = testNode.getProperty("keyPath");
+            Assert.assertNotNull("key path is null", keyPath);
+            Assert.assertTrue("keyPath contains #", !keyPath.contains("#"));
+            String keyOsName = testNode.getProperty("keyOsName");
+            Assert.assertFalse("keyOsName contains SYS", keyOsName.contains("SYS"));
         } catch (Exception e) {
             Logger.getLogger(PreProcessorFactoryTest.class.getName()).log(Level.SEVERE, "Test fails", e);
             Assert.fail(e.toString());
