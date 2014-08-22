@@ -47,9 +47,9 @@ keyDef2 = !&lt;$system&gt;_val # Second inclusion of pre-processor value.
 
 It is also possible to access environment and system variables using the pre-processor:
 
-<dfn>Environment</dfn>
+<strong>Environment:</strong>
 <code>!&lt;$ENV.PAT&gt;</code>
-<dfn>Java system variable</dfn>
+<strong>Java system variable:</strong>
 <code>!&lt;$SYS.os.name&gt;</code>
 
 Properties - main features
@@ -62,7 +62,6 @@ Properties are stored in a tree. A property looks like e.g:
 or
 
 <code>key2 : value2</code>
-
 
 The tree nodes are defined in this format: 
 
@@ -85,6 +84,13 @@ With another line.
 */</pre>
 </li>
 </ul>
+
+References are also supported:
+
+<pre>
+# Here is a reference to key4 and key6 on the same node
+keyRef5 = ${/Test/hello/world:key4} ${/Test/hello/world:key4} ${/Test/hello/world:key6}
+</pre>
 
 Java Interfaces
 ---------------
