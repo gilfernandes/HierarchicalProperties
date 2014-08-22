@@ -45,6 +45,12 @@ keyDef2 = !&lt;$system&gt;_val # Second inclusion of pre-processor value.
 !&lt;endif&gt;
 </pre>
 
+It is also possible to access environment and system variables using the pre-processor:
+
+<dfn>Environment</dfn>
+<code>!&lt;$ENV.PAT&gt;</code>
+<dfn>Java system variable</dfn>
+<code>!&lt;$SYS.os.name&gt;</code>
 
 Properties - main features
 --------------------------
@@ -82,6 +88,8 @@ With another line.
 
 Java Interfaces
 ---------------
+
+<h5>Factories</h5>
 
 There are three factories in this project:
 <ul>
