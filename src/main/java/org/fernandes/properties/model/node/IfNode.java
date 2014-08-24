@@ -2,13 +2,15 @@
  OSSCUBE 2014
  */
 
-package org.fernandes.properties.model;
+package org.fernandes.properties.model.node;
+
+import org.fernandes.properties.model.IfOperator;
 
 /**
  * Contains the parts of a conditional expression.
  * @author onepoint
  */
-public class IfContainer {
+public class IfNode extends ContainerNode {
 
     /**
      * The actual variable.
@@ -39,7 +41,7 @@ public class IfContainer {
      * Associates the variable directly to this object.
      * @param variable The variable.
      */
-    public IfContainer(String variable) {
+    public IfNode(String variable) {
         this.variable = variable;
     }
 
@@ -118,8 +120,6 @@ public class IfContainer {
         return variableValue;
     }
 
-
-
     /**
      * Returns the string representation of this object.
      * @return the string representation of this object.
@@ -130,7 +130,18 @@ public class IfContainer {
                 ", match=" + match + ", operator=" + operator + '}';
     }
 
-
+    /**
+     * Returns the content of this node.
+     * @return the content of this node.
+     */
+    @Override
+    public CharSequence produce() {
+        StringBuilder builder = new StringBuilder();
+        if(isMatch()) {
+            stream().forEach(node -> builder.append(node.produce()));
+        }
+        return builder;
+    }
 
 
 

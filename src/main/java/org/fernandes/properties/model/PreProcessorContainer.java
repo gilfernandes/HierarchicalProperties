@@ -6,6 +6,13 @@ package org.fernandes.properties.model;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Stack;
+import org.fernandes.properties.model.node.ContainerNode;
+import org.fernandes.properties.model.node.ForNode;
+import org.fernandes.properties.model.node.IfNode;
+import org.fernandes.properties.model.node.IncludeNode;
+import org.fernandes.properties.model.node.SyntaxNode;
+import org.fernandes.properties.model.node.TextNode;
+import org.fernandes.properties.model.node.VarNode;
 
 /**
  * Container for the result of the pre processing of the hierarchical
@@ -38,7 +45,13 @@ public class PreProcessorContainer {
     /**
      * The stack containing all the if expressions.
      */
-    private final Stack<IfContainer> ifStack = new Stack<>();
+    private final Stack<IfNode> ifStack = new Stack<>();
+
+    /**
+     * Used to contains syntax trees. Used to process the for loops and
+     * everything below it.
+     */
+    private final ContainerNode parentContainer = new ContainerNode();
 
     /**
      * Adds normal text with no processing to the includeList.
@@ -48,7 +61,12 @@ public class PreProcessorContainer {
      */
     public PreProcessorContainer processText(String text) {
         if (doProcess()) {
-            preprocessedText.append(text);
+            if (parentContainer.isEmpty()) {
+                preprocessedText.append(text);
+            } else {
+                ForNode forNode = (ForNode) parentContainer.peekForNode();
+                forNode.add(new TextNode(text));
+            }
         }
         return this;
     }
@@ -56,7 +74,7 @@ public class PreProcessorContainer {
     /**
      * Sets the current include type.
      *
-     * @param text The text representing n include type.
+     * @param text The text representing an include type.
      * @return a reference to this object.
      */
     public PreProcessorContainer processCurIncludeType(String text) {
@@ -74,8 +92,13 @@ public class PreProcessorContainer {
      */
     public PreProcessorContainer processInclude(String text) {
         if (doProcess()) {
-            CharSequence cs = curIncludeType.process(text);
-            preprocessedText.append(cs);
+            if (parentContainer.isEmpty()) {
+                CharSequence cs = curIncludeType.process(text);
+                preprocessedText.append(cs);
+            } else {
+                ForNode forNode = (ForNode) parentContainer.peekForNode();
+                forNode.add(new IncludeNode(text, curIncludeType));
+            }
         }
         return this;
     }
@@ -101,10 +124,17 @@ public class PreProcessorContainer {
      */
     public PreProcessorContainer addConstantVal(String value) {
         if (doProcess()) {
-            constantMap.put(constantKey, value);
+            if (parentContainer.isEmpty()) {
+                constantMap.put(constantKey, value);
+            }
+            else {
+                ForNode forNode = (ForNode) parentContainer.peekForNode();
+                forNode.put(constantKey, value); // Thi variable exists only in the context of the "for".
+            }
         }
         return this;
     }
+
 
     /**
      * Adds a value of a define.
@@ -115,15 +145,23 @@ public class PreProcessorContainer {
      */
     public PreProcessorContainer addDefineVal(String key) {
         if (doProcess()) {
-            if (key.startsWith(ExternalEnvironment.ENV.toString())) {
-                addEnvVal(key);
-            } else if (key.startsWith(ExternalEnvironment.SYS.toString())) {
-                addSystemVal(key);
-            } else if (constantMap.containsKey(key)) {
-                String value = constantMap.get(key);
-                if (value != null) {
-                    preprocessedText.append(value.trim());
+            if (parentContainer.isEmpty()) {
+                if (key.startsWith(ExternalEnvironment.ENV.toString())) {
+                    addEnvVal(key);
+                } else if (key.startsWith(ExternalEnvironment.SYS.toString())) {
+                    addSystemVal(key);
+                } else if (constantMap.containsKey(key)) {
+                    String value = constantMap.get(key);
+                    if (value != null) {
+                        preprocessedText.append(value.trim());
+                    }
                 }
+            }
+            else {
+                ForNode forNode = (ForNode) parentContainer.peekForNode();
+                forNode.putAll(constantMap);
+                VarNode varNode = new VarNode(key);
+                forNode.add(varNode);
             }
         }
         return this;
@@ -172,7 +210,7 @@ public class PreProcessorContainer {
      * @return a reference to this object.
      */
     public PreProcessorContainer ifStartVar(String variable) {
-        IfContainer ifContainer = new IfContainer(variable);
+        IfNode ifContainer = new IfNode(variable);
         ifStack.push(ifContainer);
         return this;
     }
@@ -185,7 +223,7 @@ public class PreProcessorContainer {
      * @return a reference to this object.
      */
     public PreProcessorContainer elseIfStartVar(String variable) {
-        IfContainer ifContainer = ifStack.peek();
+        IfNode ifContainer = ifStack.peek();
         ifContainer.setVariable(variable);
         return this;
     }
@@ -198,7 +236,7 @@ public class PreProcessorContainer {
      * @return a reference to this object.
      */
     public PreProcessorContainer ifStartVal(String value) {
-        IfContainer ifContainer = ifStack.peek();
+        IfNode ifContainer = ifStack.peek();
         ifContainer.setValue(value);
         String variable = ifContainer.getVariable();
         String variableVal = constantMap.get(variable);
@@ -206,6 +244,78 @@ public class PreProcessorContainer {
             throw new IllegalArgumentException(String.format("%s was not defined.", variable));
         }
         ifContainer.setVariableValue(variableVal);
+        return this;
+    }
+
+    /**
+     * Adds the variable of a "for".
+     *
+     * @param value The value of the variable in the for statement.
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer forVar(String value) {
+        // Extract from "i = 1 : 10" or "for i = 1 : 2 : 10"
+        ForNode forNode = new ForNode(value);
+        parentContainer.add(forNode);
+        return this;
+    }
+
+    /**
+     * Adds the start value of a "for".
+     *
+     * @param value The start value of the variable in the for statement.
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer forStart(String value) {
+        // Extract from "i = 1 : 10" or "for i = 1 : 2 : 10"
+        ForNode forNode = (ForNode) parentContainer.peekForNode();
+        forNode.setStart(Integer.parseInt(value));
+        return this;
+    }
+
+    /**
+     * Adds the end value of a "for". Note: this value may be considered the
+     * step if another ": \d+" comes after this value here.
+     *
+     * @param value The end or step value of the variable in the for statement.
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer forEndOrStep(String value) {
+        // Extract from "i = 1 : 10" or "for i = 1 : 2 : 10"
+        ForNode forNode = (ForNode) parentContainer.peekForNode();
+        forNode.setEnd(Integer.parseInt(value));
+        return this;
+    }
+
+    /**
+     * Adds the end value of a "for". Note: this value may be considered the
+     * step if another ": \d+" comes after this value here.
+     *
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer forEnd() {
+        // Extract from "i = 1 : 10" or "for i = 1 : 2 : 10"
+        ForNode forNode = (ForNode) parentContainer.peekForNode();
+        SyntaxNode parent = forNode.getParent();
+        if (parent == parentContainer) {
+            preprocessedText.append(parentContainer.produce());
+            parentContainer.clear(); // clear up.
+        }
+        return this;
+    }
+
+    /**
+     * Adds the end value of a "for".
+     *
+     * @param value The end value of the variable in the for statement.
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer forEnd(String value) {
+        // Extract from "i = 1 : 10" or "for i = 1 : 2 : 10"
+        ForNode forNode = (ForNode) parentContainer.peekForNode();
+        int step = forNode.getEnd();
+        forNode.setStep(step);
+        forNode.setEnd(Integer.parseInt(value));
         return this;
     }
 
@@ -225,7 +335,7 @@ public class PreProcessorContainer {
      * @return a reference to this object.
      */
     public PreProcessorContainer ifElse() {
-        IfContainer curIf = ifStack.peek();
+        IfNode curIf = ifStack.peek();
         IfOperator reverse = curIf.reverseMatch();
         curIf.setOperator(reverse);
         curIf.setVariableValue(curIf.getVariableValue()); // re-evaluation of the match
@@ -240,7 +350,7 @@ public class PreProcessorContainer {
      * @return a reference to this object.
      */
     public PreProcessorContainer ifOperator(String operator) {
-        IfContainer ifContainer = ifStack.peek();
+        IfNode ifContainer = ifStack.peek();
         IfOperator op = IfOperator.bySign(operator);
         ifContainer.setOperator(op);
         return this;

@@ -136,16 +136,7 @@ public class HierarchicalPropertiesParser extends AbstractParser<DefaultHierarch
     }
 
     public Rule blankLine() {
-        return sequence(spaces(), newline());
-    }
-
-    @Override
-    public Rule spaces() {
-        return zeroOrMore(spacechar());
-    }
-
-    public Rule spacechar() {
-        return anyOf(" \t");
+        return sequence(optionalSpaces(), newline());
     }
 
     public Rule newline() {

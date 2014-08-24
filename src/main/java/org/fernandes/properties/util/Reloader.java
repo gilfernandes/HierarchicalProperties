@@ -1,7 +1,7 @@
 /*
  OSSCUBE 2014
  */
-package org.fernandes.properties;
+package org.fernandes.properties.util;
 
 import java.io.IOException;
 import java.nio.file.Path;

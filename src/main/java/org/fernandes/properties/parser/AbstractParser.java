@@ -39,10 +39,27 @@ public class AbstractParser <T> extends BaseParser<T> {
     }
 
     /**
-     * Returns a rule that recognises optional multiple spaces.
-     * @return a rule that recognises optional multiple spaces.
+     * Returns a rule that recognises optional multiple optionalSpaces.
+     * @return a rule that recognises optional multiple optionalSpaces.
      */
-    protected Rule spaces() {
-        return zeroOrMore(" ");
+    protected Rule optionalSpaces() {
+        return zeroOrMore(spacechar());
     }
+
+    /**
+     * Returns a rule that recognises mandatory multiple optionalSpaces.
+     * @return a rule that recognises mandatory multiple optionalSpaces.
+     */
+    protected Rule mandatorySpaces() {
+        return oneOrMore(spacechar());
+    }
+
+    /**
+     * Space characters including the tab.
+     * @return a rule for space characters including the tab.
+     */
+    public Rule spacechar() {
+        return anyOf(" \t");
+    }
+
 }

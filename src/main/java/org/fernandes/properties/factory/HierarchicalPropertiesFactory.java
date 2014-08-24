@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.fernandes.properties.model.HierarchicalProperties;
-import org.fernandes.properties.Reloader;
+import org.fernandes.properties.util.Reloader;
 import org.fernandes.properties.model.DefaultHierarchicalProperties;
 import org.fernandes.properties.model.IncludeType;
 import org.fernandes.properties.parser.HierarchicalPropertiesParser;

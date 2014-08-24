@@ -6,7 +6,7 @@ package org.fernandes.properties.factory;
 
 import java.nio.file.Path;
 import org.fernandes.properties.model.HierarchicalProperties;
-import org.fernandes.properties.Reloader;
+import org.fernandes.properties.util.Reloader;
 
 /**
  * Preprocesses and then instantiates the hierarchical properties.

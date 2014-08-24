@@ -255,6 +255,35 @@ public class PreProcessorFactoryTest {
     }
 
     /**
+     * Testing the for clause.
+     */
+    @Test
+    public void createInstanceFor() {
+        try {
+            String included = PreProcessorFactory.createInstance(Paths.get("src/test/resources/hierarchicalProperties/map_for.txt"));
+            Assert.assertTrue("key2 has not been found in preprocessed string.", included.contains("key2"));
+            Assert.assertTrue("'sequenceFor = testFor_prod_9' not in string", included.contains("testFor_prod_10"));
+            Assert.assertTrue("'sequenceFor = testFor_prod_10' not in string", included.contains("testFor_prod_10"));
+            HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(included, true);
+            PropertyNode root = props.getNode("/");
+            Assert.assertNotNull("The root node is null", root);
+            PropertyNode testNode = props.getNode("/Test");
+            Assert.assertNotNull("Test node is null", testNode);
+            String keyDef = testNode.getProperty("keyDef");
+            Assert.assertNotNull("keyDef is null", keyDef);
+            Assert.assertEquals("keyDef is not 'prod_val'", "prod_val", keyDef);
+            String keyPath = testNode.getProperty("keyPath");
+            Assert.assertNotNull("key path is null", keyPath);
+            Assert.assertTrue("keyPath contains #", !keyPath.contains("#"));
+            String keyOsName = testNode.getProperty("keyOsName");
+            Assert.assertFalse("keyOsName contains SYS", keyOsName.contains("SYS"));
+        } catch (Exception e) {
+            Logger.getLogger(PreProcessorFactoryTest.class.getName()).log(Level.SEVERE, "Test fails", e);
+            Assert.fail(e.toString());
+        }
+    }
+
+    /**
      * Creates an instance of the preprocessor factory and performs the includes
      * from the classpath.
      */
