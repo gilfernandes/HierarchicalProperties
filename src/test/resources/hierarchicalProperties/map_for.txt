@@ -13,5 +13,5 @@ keyPath = !<$ENV.PATH> # External preprocessor variable 1
 keyOsName = !<$SYS.os.name> # External preprocessor variable 2
 sequence = test
 !<for i = 1 : 20>
-sequenceFor = testFor_!<$env>_!<$i>
+sequenceFor = testFor_!<$env>_!<$i> - SYSTEMROOT: !<$ENV.SYSTEMROOT> - OS_NAME: !<$SYS.os.name>
 !<endfor>

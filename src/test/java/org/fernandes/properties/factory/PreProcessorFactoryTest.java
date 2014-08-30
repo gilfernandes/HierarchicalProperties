@@ -264,6 +264,8 @@ public class PreProcessorFactoryTest {
             Assert.assertTrue("key2 has not been found in preprocessed string.", included.contains("key2"));
             Assert.assertTrue("'sequenceFor = testFor_prod_9' not in string", included.contains("testFor_prod_10"));
             Assert.assertTrue("'sequenceFor = testFor_prod_10' not in string", included.contains("testFor_prod_10"));
+            Assert.assertTrue("'SYSTEMROOT: C:\\Windows - OS_NAME: Windows 7' was not found.",
+                    included.contains("SYSTEMROOT: C:\\Windows - OS_NAME: Windows 7"));
             HierarchicalProperties props = HierarchicalPropertiesFactory.createInstance(included, true);
             PropertyNode root = props.getNode("/");
             Assert.assertNotNull("The root node is null", root);

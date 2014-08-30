@@ -117,6 +117,44 @@ public class PreProcessorContainer {
     }
 
     /**
+     * Adds a value of a define.
+     *
+     * @param key The key that should be in the constant map to be resolved. If
+     * the key is not in the constant map it will be ignored.
+     * @return a reference to this object.
+     */
+    public PreProcessorContainer addDefineVal(String key) {
+        final boolean isEnv = key.startsWith(ExternalEnvironment.ENV.toString());
+        final boolean isSys = key.startsWith(ExternalEnvironment.SYS.toString());
+        if (doProcess()) {
+            if (parentContainer.isEmpty()) {
+                if (isEnv) {
+                    addEnvVal(key);
+                } else if (isSys) {
+                    addSystemVal(key);
+                } else if (constantMap.containsKey(key)) {
+                    String value = constantMap.get(key);
+                    if (value != null) {
+                        preprocessedText.append(value.trim());
+                    }
+                }
+            } else {
+                if (isEnv) {
+                    addEnvVal(key);
+                } else if (isSys) {
+                    addSystemVal(key);
+                } else {
+                    ForNode forNode = (ForNode) parentContainer.peekForNode();
+                    forNode.putAll(constantMap); //
+                    VarNode varNode = new VarNode(key);
+                    forNode.add(varNode);
+                }
+            }
+        }
+        return this;
+    }
+
+    /**
      * Adds a constant with its corresponding value.
      *
      * @param value The value in the constant map.
@@ -126,42 +164,9 @@ public class PreProcessorContainer {
         if (doProcess()) {
             if (parentContainer.isEmpty()) {
                 constantMap.put(constantKey, value);
-            }
-            else {
+            } else {
                 ForNode forNode = (ForNode) parentContainer.peekForNode();
                 forNode.put(constantKey, value); // Thi variable exists only in the context of the "for".
-            }
-        }
-        return this;
-    }
-
-
-    /**
-     * Adds a value of a define.
-     *
-     * @param key The key that should be in the constant map to be resolved. If
-     * the key is not in the constant map it will be ignored.
-     * @return a reference to this object.
-     */
-    public PreProcessorContainer addDefineVal(String key) {
-        if (doProcess()) {
-            if (parentContainer.isEmpty()) {
-                if (key.startsWith(ExternalEnvironment.ENV.toString())) {
-                    addEnvVal(key);
-                } else if (key.startsWith(ExternalEnvironment.SYS.toString())) {
-                    addSystemVal(key);
-                } else if (constantMap.containsKey(key)) {
-                    String value = constantMap.get(key);
-                    if (value != null) {
-                        preprocessedText.append(value.trim());
-                    }
-                }
-            }
-            else {
-                ForNode forNode = (ForNode) parentContainer.peekForNode();
-                forNode.putAll(constantMap);
-                VarNode varNode = new VarNode(key);
-                forNode.add(varNode);
             }
         }
         return this;
@@ -174,15 +179,27 @@ public class PreProcessorContainer {
      * not in the it will be ignored.
      * @return a reference to this object.
      */
-    public PreProcessorContainer addEnvVal(String key) {
+    private PreProcessorContainer addEnvVal(String key) {
         if (doProcess()) {
             String realKey = key.replaceFirst("^" + ExternalEnvironment.ENV + ".", "");
             String value = System.getenv(realKey);
             if (value != null) {
-                preprocessedText.append(value);
+                if (parentContainer.isEmpty()) {
+                    preprocessedText.append(value);
+                } else {
+                    addKeyValueForNode(key, value);
+                }
             }
         }
         return this;
+    }
+
+    private void addKeyValueForNode(String key, String value) {
+        ForNode forNode = (ForNode) parentContainer.peekForNode();
+        forNode.put(key, value); // Add the key to the constant map.
+        // Add the node of the variable to the for loop.
+        VarNode varNode = new VarNode(key);
+        forNode.add(varNode);
     }
 
     /**
@@ -197,7 +214,11 @@ public class PreProcessorContainer {
             String realKey = key.replaceFirst("^" + ExternalEnvironment.SYS + ".", "");
             String value = System.getProperty(realKey);
             if (value != null) {
-                preprocessedText.append(value);
+                if (parentContainer.isEmpty()) {
+                    preprocessedText.append(value);
+                } else {
+                    addKeyValueForNode(key, value);
+                }
             }
         }
         return this;
